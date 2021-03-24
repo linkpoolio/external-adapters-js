@@ -94,6 +94,7 @@
     "geodb",
     "therundown",
     "tradingeconomics-stream",
+    "watchsignals"
     "dnsproof"
   ],
   "scripts": {
