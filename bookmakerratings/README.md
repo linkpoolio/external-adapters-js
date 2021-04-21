@@ -19,7 +19,7 @@
 
 ## Game Odds Endpoint
 
-Gets the odds on the outcomes for the selected game (returns [home odds, away odds])
+Gets the odds on the outcomes for the selected game (returns ABI-encoding of (home-odds x 1000, away-odds x 1000) )
 
 ### Input Params
 
@@ -99,9 +99,9 @@ Gets the odds on the outcomes for the selected game (returns [home odds, away od
       "37": null
     },
     "version": 1618441288,
-    "result": [1.236, 4.105]
+    "result": "0x00000000000000000000000000000000000000000000000000000000000004d40000000000000000000000000000000000000000000000000000000000001009"
   },
-  "result": [1.236, 4.105],
+  "result": "0x00000000000000000000000000000000000000000000000000000000000004d40000000000000000000000000000000000000000000000000000000000001009",
   "statusCode": 200
 }
 ```
