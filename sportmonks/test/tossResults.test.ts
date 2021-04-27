@@ -4,7 +4,7 @@ import { assertSuccess, assertError } from '@chainlink/adapter-test-helpers'
 import { AdapterRequest } from '@chainlink/types'
 import { makeExecute } from '../src/adapter'
 
-describe('execute', () => {
+describe('toss-results endpoint', () => {
   const jobID = '1'
   const execute = makeExecute()
 
@@ -12,19 +12,18 @@ describe('execute', () => {
     const requests = [
       {
         name: 'id not supplied',
-        testData: { data: { base: 'ETH', quote: 'USD' } },
+        testData: { data: { round: '1st Match', endpoint: 'toss-results' } },
       },
       {
-        name: 'base/quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'USD' } },
+        name: 'round',
+        testData: { id: jobID, data: { round: '1st Match', endpoint: 'toss-results' } },
       },
       {
-        name: 'from/to',
-        testData: { id: jobID, data: { from: 'ETH', to: 'USD' } },
-      },
-      {
-        name: 'coin/market',
-        testData: { id: jobID, data: { coin: 'ETH', market: 'USD' } },
+        name: 'round/season_id',
+        testData: {
+          id: jobID,
+          data: { round: '1st Match', season_id: 708, endpoint: 'toss-results' },
+        },
       },
     ]
 
@@ -32,8 +31,8 @@ describe('execute', () => {
       it(`${req.name}`, async () => {
         const data = await execute(req.testData as AdapterRequest)
         assertSuccess({ expected: 200, actual: data.statusCode }, data, jobID)
-        assert.isAbove(data.result, 0)
-        assert.isAbove(data.data.result, 0)
+        assert.isTrue(data.result === 'away')
+        assert.isTrue(data.data.result === 'away')
       })
     })
   })
@@ -43,12 +42,8 @@ describe('execute', () => {
       { name: 'empty body', testData: {} },
       { name: 'empty data', testData: { data: {} } },
       {
-        name: 'base not supplied',
-        testData: { id: jobID, data: { quote: 'USD' } },
-      },
-      {
-        name: 'quote not supplied',
-        testData: { id: jobID, data: { base: 'ETH' } },
+        name: 'round not supplied',
+        testData: { id: jobID, data: { season_id: 708, endpoint: 'toss-results' } },
       },
     ]
 
@@ -67,12 +62,18 @@ describe('execute', () => {
   context('error calls @integration', () => {
     const requests = [
       {
-        name: 'unknown base',
-        testData: { id: jobID, data: { base: 'not_real', quote: 'USD' } },
+        name: 'unknown season_id',
+        testData: {
+          id: jobID,
+          data: { round: '1st Match', season_id: 'not_real', endpoint: 'toss-results' },
+        },
       },
       {
-        name: 'unknown quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'not_real' } },
+        name: 'unknown round',
+        testData: {
+          id: jobID,
+          data: { round: 'not_real', season_id: 708, endpoint: 'toss-results' },
+        },
       },
     ]
 

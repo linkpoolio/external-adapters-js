@@ -1,7 +1,7 @@
 import { Requester, Validator, AdapterError } from '@chainlink/external-adapter'
 import { Config, ExecuteWithConfig, ExecuteFactory } from '@chainlink/types'
 import { makeConfig, DEFAULT_ENDPOINT } from './config'
-import { example } from './endpoint'
+import { matchResults, tossResults } from './endpoint'
 
 const inputParams = {
   endpoint: false,
@@ -17,8 +17,11 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const endpoint = validator.validated.data.endpoint || DEFAULT_ENDPOINT
 
   switch (endpoint.toLowerCase()) {
-    case example.NAME: {
-      return await example.execute(request, config)
+    case matchResults.NAME: {
+      return await matchResults.execute(request, config)
+    }
+    case tossResults.NAME: {
+      return await tossResults.execute(request, config)
     }
     default: {
       throw new AdapterError({
