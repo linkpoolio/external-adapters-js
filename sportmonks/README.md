@@ -10,9 +10,9 @@
 
 ### Input Parameters
 
-| Required? |   Name   |     Description     |                                     Options                                     |  Defaults to  |
-| :-------: | :------: | :-----------------: | :-----------------------------------------------------------------------------: | :-----------: |
-|           | endpoint | The endpoint to use | [match-results](#Math-Results-Endpoint), [toss-results](#Toss-Results-Endpoint) | match-results |
+| Required? |   Name   |     Description     |                                     Options                                      |  Defaults to  |
+| :-------: | :------: | :-----------------: | :------------------------------------------------------------------------------: | :-----------: |
+|           | endpoint | The endpoint to use | [match-results](#Match-Results-Endpoint), [toss-results](#Toss-Results-Endpoint) | match-results |
 
 ---
 
