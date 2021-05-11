@@ -1,6 +1,16 @@
 import { Requester, Validator } from '@chainlink/external-adapter'
 import { ExecuteWithConfig, Config } from '@chainlink/types'
 
+type BookmakerGameId = number
+
+type BookmakerTeamOdds = [number, number, number, number, number, [[], [[number]]], string, number]
+
+interface BookmakerGameOdds {
+  [index: string]: BookmakerTeamOdds
+}
+
+type BookmakerOdds = [BookmakerGameId, number, number, BookmakerGameOdds, null, [], [], [], number]
+type BookmakerOddsResponse = { odds: [BookmakerOdds]; externalRbIds: { [index: string]: number } }
 export const NAME = 'game-odds'
 
 const customParams = {
@@ -42,8 +52,8 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   }
 
   const response = await Requester.request(options)
-
-  const result = Object.values(response.data.odds[0][3]).map((data: any) => data[5][1][0])
+  const { data }: { data: BookmakerOddsResponse } = response
+  const result = Object.values(data.odds[0][3]).map((odd: BookmakerTeamOdds) => odd[5][1][0])
 
   return Requester.success(jobRunID, {
     data: config.verbose ? { ...response.data, result } : { result },

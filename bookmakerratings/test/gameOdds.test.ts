@@ -4,7 +4,8 @@ import { assertSuccess, assertError } from '@chainlink/adapter-test-helpers'
 import { AdapterRequest } from '@chainlink/types'
 import { makeExecute } from '../src/adapter'
 
-describe('execute', () => {
+// !IMPORTANT: Tests will fail if game id is used for a historical game
+describe('game odds execute', () => {
   const jobID = '1'
   const execute = makeExecute()
 
@@ -12,11 +13,11 @@ describe('execute', () => {
     const requests = [
       {
         name: 'id not supplied',
-        testData: { data: { gameIds: 1589487 } },
+        testData: { data: { gameIds: 1617238 } },
       },
       {
         name: 'gameIds',
-        testData: { id: jobID, data: { gameIds: 1589487 } },
+        testData: { id: jobID, data: { gameIds: 1617238 } },
       },
     ]
 
