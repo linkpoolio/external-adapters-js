@@ -1,7 +1,7 @@
 import { Requester, Validator, AdapterError } from '@chainlink/external-adapter'
 import { Config, ExecuteWithConfig, ExecuteFactory } from '@chainlink/types'
 import { makeConfig, DEFAULT_ENDPOINT } from './config'
-import { gameOdds } from './endpoint'
+import { gameOdds, leagues } from './endpoint'
 
 const inputParams = {
   endpoint: false,
@@ -9,16 +9,21 @@ const inputParams = {
 
 export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const validator = new Validator(request, inputParams)
-  if (validator.error) throw validator.error
+  const { validated, error } = validator
+
+  if (error) throw error
 
   Requester.logConfig(config)
 
-  const jobRunID = validator.validated.id
-  const endpoint = validator.validated.data.endpoint || DEFAULT_ENDPOINT
+  const jobRunID = validated.id
+  const endpoint = validated.data.endpoint || DEFAULT_ENDPOINT
 
   switch (endpoint.toLowerCase()) {
     case gameOdds.NAME: {
       return await gameOdds.execute(request, config)
+    }
+    case leagues.NAME: {
+      return await leagues.execute(request, config)
     }
     default: {
       throw new AdapterError({
