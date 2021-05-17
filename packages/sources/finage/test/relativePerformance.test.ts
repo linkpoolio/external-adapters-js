@@ -2,7 +2,7 @@ import { assert } from 'chai'
 import { Requester } from '@chainlink/external-adapter'
 import { assertSuccess, assertError } from '@chainlink/adapter-test-helpers'
 import { AdapterRequest } from '@chainlink/types'
-import { makeExecute } from '../src/adapter'
+import { makeExecute } from '@chainlink/external-adapters-js/adapters/finage/src/adapter'
 
 describe('execute', () => {
   process.env.API_KEY = process.env.API_KEY ?? 'test_API_key'
