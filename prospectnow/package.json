@@ -28,8 +28,8 @@
     "test": "mocha 'test/**/*.test.ts'",
     "test:unit": "mocha --grep @integration --invert 'test/**/*.test.ts'",
     "test:integration": "mocha --grep @integration 'test/**/*.test.ts'",
-    "server": "node -e 'require(\"./index.js\").server() -r dotenv/config'",
-    "server:dist": "node -e 'require(\"./dist/index.js\").server() -r dotenv/config'",
+    "server": "node -e 'require(\"./index.js\").server()'",
+    "server:dist": "node -e 'require(\"./dist/index.js\").server()'",
     "start": "yarn server:dist"
   },
   "devDependencies": {
