@@ -101,7 +101,22 @@
       "twelvedata",
       "unibit",
       "wbtc-address-set",
-      "xbto"
+      "xbto",
+      "dydx-stark",
+      "iex-cloud",
+      "cfbenchmarks",
+      "conflux",
+      "harmony",
+      "tiingo",
+      "ethwrite",
+      "geodb",
+      "therundown",
+      "tradingeconomics-stream",
+      "watchsignals",
+      "dnsproof",
+      "genesisvolatility",
+      "ciphertrace",
+      "bookmakerratings"
     ]
   },
   "targets": {

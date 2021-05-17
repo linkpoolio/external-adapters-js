@@ -3,14 +3,6 @@ packages/**/*.zip
 dist
 **/tsconfig.tsbuildinfo
 .DS_Store
-
-# Yarn 2
-.yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+cache
+.env
 node_modules
-*generated*
