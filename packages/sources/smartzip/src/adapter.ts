@@ -1,10 +1,10 @@
 import { Requester, Validator, AdapterError } from '@chainlink/ea-bootstrap'
 import { Config, ExecuteWithConfig, ExecuteFactory } from '@chainlink/types'
-import { makeConfig, DEFAULT_ENDPOINT } from './config'
-import { example } from './endpoint'
+import { makeConfig } from './config'
+import { PropertyDetails } from './endpoint'
 
 const inputParams = {
-  endpoint: false,
+  endpoint: true,
 }
 
 export const execute: ExecuteWithConfig<Config> = async (request, config) => {
@@ -14,11 +14,11 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   Requester.logConfig(config)
 
   const jobRunID = validator.validated.id
-  const endpoint = validator.validated.data.endpoint || DEFAULT_ENDPOINT
+  const endpoint = validator.validated.data.endpoint
 
   switch (endpoint.toLowerCase()) {
-    case example.NAME: {
-      return await example.execute(request, config)
+    case PropertyDetails.NAME: {
+      return await PropertyDetails.execute(request, config)
     }
     default: {
       throw new AdapterError({

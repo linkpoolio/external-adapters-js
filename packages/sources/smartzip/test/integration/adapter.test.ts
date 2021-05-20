@@ -10,20 +10,8 @@ describe('execute', () => {
   describe('successful calls @integration', () => {
     const requests = [
       {
-        name: 'id not supplied',
-        testData: { data: { base: 'ETH', quote: 'USD' } },
-      },
-      {
-        name: 'base/quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'USD' } },
-      },
-      {
-        name: 'from/to',
-        testData: { id: jobID, data: { from: 'ETH', to: 'USD' } },
-      },
-      {
-        name: 'coin/market',
-        testData: { id: jobID, data: { coin: 'ETH', market: 'USD' } },
+        name: 'get property avm',
+        testData: { id: jobID, data: { endpoint: 'property-details', property_id: 100000125583 } },
       },
     ]
 
@@ -40,12 +28,8 @@ describe('execute', () => {
   describe('error calls @integration', () => {
     const requests = [
       {
-        name: 'unknown base',
-        testData: { id: jobID, data: { base: 'not_real', quote: 'USD' } },
-      },
-      {
-        name: 'unknown quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'not_real' } },
+        name: 'invalid property id',
+        testData: { id: jobID, data: { endpoint: 'property-details', property_id: 100000000000 } },
       },
     ]
 
