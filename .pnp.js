@@ -387,6 +387,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/sources/satoshitango"
       },
       {
+        "name": "@chainlink/smartzip-adapter",
+        "reference": "workspace:packages/sources/smartzip"
+      },
+      {
         "name": "@chainlink/sochain-adapter",
         "reference": "workspace:packages/sources/sochain"
       },
@@ -552,6 +556,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@chainlink/reference-transform-adapter", ["workspace:packages/composites/reference-transform"]],
       ["@chainlink/renvm-address-set-adapter", ["workspace:packages/sources/renvm-address-set"]],
       ["@chainlink/satoshitango-adapter", ["workspace:packages/sources/satoshitango"]],
+      ["@chainlink/smartzip-adapter", ["workspace:packages/sources/smartzip"]],
       ["@chainlink/sochain-adapter", ["workspace:packages/sources/sochain"]],
       ["@chainlink/stasis-adapter", ["workspace:packages/sources/stasis"]],
       ["@chainlink/synth-index-adapter", ["workspace:packages/composites/synth-index"]],
@@ -4561,6 +4566,25 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chainlink/types", "workspace:packages/core/types/@chainlink"],
             ["@types/jest", "npm:26.0.22"],
             ["@types/node", "npm:14.14.41"],
+            ["tslib", "npm:2.2.0"],
+            ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@chainlink/smartzip-adapter", [
+        ["workspace:packages/sources/smartzip", {
+          "packageLocation": "./packages/sources/smartzip/",
+          "packageDependencies": [
+            ["@chainlink/smartzip-adapter", "workspace:packages/sources/smartzip"],
+            ["@chainlink/ea-bootstrap", "workspace:packages/core/bootstrap"],
+            ["@chainlink/ea-test-helpers", "workspace:packages/core/test-helpers"],
+            ["@chainlink/types", "workspace:packages/core/types/@chainlink"],
+            ["@types/jest", "npm:26.0.22"],
+            ["@types/node", "npm:14.14.41"],
+            ["dotenv", "npm:9.0.2"],
+            ["jest", "npm:26.6.3"],
+            ["ts-jest", "virtual:4f9ebe5eea1542f1090debc773be4735b11750782767176bf9ce99e7d9055b0044a844da047f0e9b9e474bee9a77f33a8b113815e92685d42021553c885a8c07#npm:26.5.6"],
             ["tslib", "npm:2.2.0"],
             ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"]
           ],
@@ -10197,6 +10221,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["bs-logger", [
+        ["npm:0.2.6", {
+          "packageLocation": "./.yarn/cache/bs-logger-npm-0.2.6-7670f88b66-f5f2f1315d.zip/node_modules/bs-logger/",
+          "packageDependencies": [
+            ["bs-logger", "npm:0.2.6"],
+            ["fast-json-stable-stringify", "npm:2.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["bs58", [
         ["npm:2.0.0", {
           "packageLocation": "./.yarn/cache/bs58-npm-2.0.0-58001e8871-1226eafbfd.zip/node_modules/bs58/",
@@ -12323,6 +12357,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/dotenv-npm-8.2.0-6b21df4d37-16cb89cbd7.zip/node_modules/dotenv/",
           "packageDependencies": [
             ["dotenv", "npm:8.2.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:9.0.2", {
+          "packageLocation": "./.yarn/cache/dotenv-npm-9.0.2-fd127dfe81-062a31a2fd.zip/node_modules/dotenv/",
+          "packageDependencies": [
+            ["dotenv", "npm:9.0.2"]
           ],
           "linkType": "HARD",
         }]
@@ -23001,6 +23042,42 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["find-up", "npm:2.1.0"],
             ["mkdirp", "npm:1.0.4"],
             ["tsort", "npm:0.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["ts-jest", [
+        ["npm:26.5.6", {
+          "packageLocation": "./.yarn/cache/ts-jest-npm-26.5.6-fa1909416a-fd32a8b256.zip/node_modules/ts-jest/",
+          "packageDependencies": [
+            ["ts-jest", "npm:26.5.6"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:4f9ebe5eea1542f1090debc773be4735b11750782767176bf9ce99e7d9055b0044a844da047f0e9b9e474bee9a77f33a8b113815e92685d42021553c885a8c07#npm:26.5.6", {
+          "packageLocation": "./.yarn/$$virtual/ts-jest-virtual-766c35c30e/0/cache/ts-jest-npm-26.5.6-fa1909416a-fd32a8b256.zip/node_modules/ts-jest/",
+          "packageDependencies": [
+            ["ts-jest", "virtual:4f9ebe5eea1542f1090debc773be4735b11750782767176bf9ce99e7d9055b0044a844da047f0e9b9e474bee9a77f33a8b113815e92685d42021553c885a8c07#npm:26.5.6"],
+            ["@types/jest", "npm:26.0.22"],
+            ["@types/typescript", null],
+            ["bs-logger", "npm:0.2.6"],
+            ["buffer-from", "npm:1.1.1"],
+            ["fast-json-stable-stringify", "npm:2.1.0"],
+            ["jest", "npm:26.6.3"],
+            ["jest-util", "npm:26.6.2"],
+            ["json5", "npm:2.2.0"],
+            ["lodash", "npm:4.17.21"],
+            ["make-error", "npm:1.3.6"],
+            ["mkdirp", "npm:1.0.4"],
+            ["semver", "npm:7.3.5"],
+            ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"],
+            ["yargs-parser", "npm:20.2.7"]
+          ],
+          "packagePeers": [
+            "@types/jest",
+            "@types/typescript",
+            "jest",
+            "typescript"
           ],
           "linkType": "HARD",
         }]
