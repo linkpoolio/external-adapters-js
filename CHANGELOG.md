@@ -31,6 +31,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `blockstream` to get Bitcoin height and difficulty
 - Basic prometheus metrics endpoint
   - `dnsproof` to check if an Ethereum address owns a domain
+  - `blockstream` to get Bitcoin height and difficulty
+- Basic prometheus metrics endpoint
 
 ### Changed
 
