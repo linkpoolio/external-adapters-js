@@ -56,9 +56,7 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
 
   const result = parseFloat((equityPerformance - sectorPerformance).toFixed(4))
 
-  return Requester.success(jobRunID, {
-    data: config.verbose ? { result } : { result },
-    result,
-    status: 200,
-  })
+  response.data.result = result
+
+  return Requester.success(jobRunID, response, config.verbose)
 }

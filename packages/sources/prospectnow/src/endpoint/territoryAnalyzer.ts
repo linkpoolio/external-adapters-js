@@ -1,4 +1,4 @@
-import { Requester, Validator, AdapterError, logger } from '@chainlink/ea-bootstrap'
+import { Requester, Validator, AdapterError } from '@chainlink/ea-bootstrap'
 import { ExecuteWithConfig, Config } from '@chainlink/types'
 
 export const NAME = 'territoryanalyzer'
@@ -56,11 +56,7 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   }
 
   const response = await Requester.request(options, customError, 3, timeout)
-  const result = Object.values(response.data.data.soldAvgPriceArry)
+  response.data.result = Object.values(response.data.data.soldAvgPriceArry)
 
-  return Requester.success(jobRunID, {
-    data: config.verbose ? { ...response.data, result } : { result },
-    result,
-    status: 200,
-  })
+  return Requester.success(jobRunID, response, config.verbose)
 }
