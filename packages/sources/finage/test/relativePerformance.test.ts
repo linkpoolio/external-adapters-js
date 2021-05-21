@@ -1,5 +1,5 @@
 import { assert } from 'chai'
-import { Requester } from '@chainlink/external-adapter'
+import { Requester } from '@chainlink/ea-bootstrap'
 import { assertSuccess, assertError } from '@chainlink/adapter-test-helpers'
 import { AdapterRequest } from '@chainlink/types'
 import { makeExecute } from '@chainlink/external-adapters-js/adapters/finage/src/adapter'

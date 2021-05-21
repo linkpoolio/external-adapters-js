@@ -1,4 +1,4 @@
-import { Requester, Validator, AdapterError, logger } from '@chainlink/external-adapter'
+import { Requester, Validator, AdapterError, logger } from '@chainlink/ea-bootstrap'
 import { ExecuteWithConfig, Config } from '@chainlink/types'
 
 export const NAME = 'territoryanalyzer'
