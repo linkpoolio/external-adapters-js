@@ -13,6 +13,13 @@ describe('execute', () => {
         name: 'get property avm',
         testData: { id: jobID, data: { endpoint: 'property-details', property_id: 100000125583 } },
       },
+      {
+        name: 'get address avm',
+        testData: {
+          id: jobID,
+          data: { endpoint: 'addresses-suggest', street: '1200 broadway', zip: 91504 },
+        },
+      },
     ]
 
     requests.forEach((req) => {

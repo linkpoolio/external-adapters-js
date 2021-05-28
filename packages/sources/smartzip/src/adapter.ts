@@ -1,7 +1,7 @@
 import { Requester, Validator, AdapterError } from '@chainlink/ea-bootstrap'
 import { Config, ExecuteWithConfig, ExecuteFactory } from '@chainlink/types'
 import { makeConfig } from './config'
-import { PropertyDetails } from './endpoint'
+import { AddressesSuggest, PropertyDetails } from './endpoint'
 
 const inputParams = {
   endpoint: true,
@@ -17,6 +17,9 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const endpoint = validator.validated.data.endpoint
 
   switch (endpoint.toLowerCase()) {
+    case AddressesSuggest.NAME: {
+      return await AddressesSuggest.execute(request, config)
+    }
     case PropertyDetails.NAME: {
       return await PropertyDetails.execute(request, config)
     }
