@@ -39,6 +39,9 @@
       "path": "./composites/token-allocation"
     },
     {
+      "path": "./composites/vesper"
+    },
+    {
       "path": "./core/bootstrap"
     },
     {
@@ -82,6 +85,9 @@
     },
     {
       "path": "./sources/anyblock-uniswap-vwap"
+    },
+    {
+      "path": "./sources/binance"
     },
     {
       "path": "./sources/binance-dex"
@@ -274,6 +280,9 @@
     },
     {
       "path": "./sources/sochain"
+    },
+    {
+      "path": "./sources/sportsdataio"
     },
     {
       "path": "./sources/stasis"

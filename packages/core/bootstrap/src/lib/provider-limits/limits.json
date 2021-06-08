@@ -94,6 +94,19 @@
     },
     "ws": {}
   },
+  "binance": {
+    "http": {
+      "public": {
+        "rateLimit1m": 1200
+      }
+    },
+    "ws": {
+      "public": {
+        "connections": 1024,
+        "subscriptions": 1024
+      }
+    }
+  },
   "binance-dex": {
     "http": {
       "free": {
@@ -368,13 +381,22 @@
     "http": {
       "free": {
         "rateLimit1h": 136.98,
+        "rateLimit1mo": 100000,
         "note": "only mentions monthly limit"
       },
       "professional": {
-        "rateLimit1h": 342.46
+        "rateLimit1h": 342.46,
+        "rateLimit1mo": 250000,
+        "note": "only mentions monthly limit"
       },
       "corporate": {
-        "rateLimit1h": 1027.39
+        "rateLimit1h": 1027.39,
+        "rateLimit1mo": 750000,
+        "note": "only mentions monthly limit"
+      },
+      "enterprise-lite": {
+        "rateLimit1h": 2083,
+        "rateLimit1mo": 1500000
       }
     },
     "ws": {
@@ -388,6 +410,10 @@
         "subscriptions": 500
       },
       "corporate": {
+        "connections": -1,
+        "subscriptions": 500
+      },
+      "enterprise-lite": {
         "connections": -1,
         "subscriptions": 500
       }
@@ -810,16 +836,16 @@
   "tiingo": {
     "http": {
       "starter": {
-        "rateLimit1m": 8.33,
-        "rateLimit1h": 833.33
+        "rateLimit1h": 500,
+        "rateLimit1d": 20000
       },
       "power": {
-        "rateLimit1m": 333.33,
-        "rateLimit1h": 6000
+        "rateLimit1h": 20000,
+        "rateLimit1d": 50000
       },
       "commercial": {
-        "rateLimit1m": 666,
-        "rateLimit1h": 16666.666
+        "rateLimit1h": 20000,
+        "rateLimit1d": 400000
       }
     },
     "ws": {

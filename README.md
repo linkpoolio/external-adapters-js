@@ -416,6 +416,8 @@ The External Adapter will do some processing, often request data from an API, an
 Decimal.set({ precision: 100 })
 ```
 
+### Common Issues
+
 ### Testing
 
 In order to test adapters locally, you may need to set an `$API_KEY` environment variable for the given API or other required environment variables.

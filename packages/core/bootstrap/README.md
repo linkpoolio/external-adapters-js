@@ -50,7 +50,8 @@ To configure caching these environment variables are available:
 |           |       `CACHE_TYPE`        |                                                                                                                          Which cache type should be used.                                                                                                                           | `local` or `redis` |                        `local`                         |
 |           |     `CACHE_KEY_GROUP`     |                                      Set to specific group ID to group the cached data, for this adapter, with other instances in the same group. Applicable only in remote cache scenarios, where multiple adapter instances share the cache.                                      |                    |                  UUID of the adapter                   |
 |           | `CACHE_KEY_IGNORED_PROPS` |                                                                                Keys to ignore while deriving the cache key, delimited by `,`. The key set will be added to the default ignored keys                                                                                 |                    | `['id', 'maxAge', 'meta', 'rateLimitMaxAge', 'debug']` |
-|           |      `CACHE_MAX_AGE`      | Maximum age in ms. Items are not pro-actively pruned out as they age, but if you try to get an item that is too old, it'll drop it and return undefined instead of giving it to you. If set to `0` the default will be used, and if set to `< 0` entries will not persist in cache. |                    |                  `30000` (30 seconds)                  |
+|           |      `CACHE_MAX_AGE`      | Maximum age in ms. Items are not pro-actively pruned out as they age, but if you try to get an item that is too old, it'll drop it and return undefined instead of giving it to you. If set to `0` the default will be used, and if set to `< 0` entries will not persist in cache. |                    |                  `120000` (2 minutes)                  |
+|           |      `CACHE_MIN_AGE`      |                                                                                                                                 Minimum age in ms.                                                                                                                                  |                    |                  `30000` (30 seconds)                  |
 
 ### Cache key
 
@@ -139,8 +140,8 @@ Each provider is defined within [limits.json](./src/lib/provider-limits/limits.j
     },
     "ws": {
       "[plan-name]": {
-         "connections": 1,
-         "subscriptions": 10
+        "connections": 1,
+        "subscriptions": 10
       }
     }
   }, {...}
@@ -153,7 +154,7 @@ Being:
 - **plan-name**: The provider plan name. Used as a identifier for the plan. E.g. "free" or "premium"
 - There are two protocols with different limit types:
   - **http**: With `rateLimit1s`, `rateLimit1m`, `rateLimit1h`, which stands for requests per second/minute/hour respectively. If only one is provided, the rest would be calculated based on it.
-  - **ws**: Websocket limits, which acceps: `connections` and `subscriptions`. If websockets are not supported on the provider, can be left empty as `ws: {}`
+  - **ws**: Websocket limits, which accepts: `connections` and `subscriptions`. If websockets are not supported on the provider, can be left empty as `ws: {}`
 
 ### Cache Warming
 
@@ -182,15 +183,17 @@ To configure caching these environment variables are available:
 
 ## Metrics
 
-A metrics server can be exposed which returns prometheus compatible data on the `$BASE_URL/metrics` endpoint on the specified port.
+A metrics server can be exposed which returns prometheus compatible data on the metrics endpoint on the specified port.
+When enabled, a metrics endpoint is opened on `/metrics`, which can be prepended with the `BASE_URL` if `METRICS_USE_BASE_URL` is enabled.
 
 \*Please note that this feature is EXPERIMENTAL.
 
-| Required? |              Name              |                  Description                  | Options | Defaults to |
-| :-------: | :----------------------------: | :-------------------------------------------: | :-----: | :---------: |
-|           | `EXPERIMENTAL_METRICS_ENABLED` |  Set to `true` to enable metrics collection.  |         |   `false`   |
-|           |         `METRICS_PORT`         | The port the `/metrics` endpoint is served on |         |   `9080`    |
-|           |         `METRICS_NAME`         |    set to apply a label of to each metric.    |         |  undefined  |
+| Required? |              Name              |                                  Description                                   | Options | Defaults to |
+| :-------: | :----------------------------: | :----------------------------------------------------------------------------: | :-----: | :---------: |
+|           | `EXPERIMENTAL_METRICS_ENABLED` |                  Set to `true` to enable metrics collection.                   |         |   `false`   |
+|           |     `METRICS_USE_BASE_URL`     | Set to "true" to have the internal metrics endpoint use the supplied base url. |         |   `false`   |
+|           |         `METRICS_PORT`         |                   The port the metrics endpoint is served on                   |         |   `9080`    |
+|           |         `METRICS_NAME`         |                    set to apply a label of to each metric.                     |         |  undefined  |
 
 To run Prometheus and Grafana with development setup:
 
@@ -210,7 +213,8 @@ From the moment the subscription is confirmed, the adapter will start receiving 
 
 | Required? |                Name                |                                                                             Description                                                                              | Options | Defaults to |
 | :-------: | :--------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----: | :---------: |
-|           |       `WS_SUBSCRIPTION_TTL`        |            Subscription expiration time in ms. If no new incoming requests ask for this information during this time, the subscription will be cancelled.            |         |   `70000`   |
-|           | `WS_SUBSCRIPTION_UNRESPONSIVE_TTL` | Unresponsive subscription expiration time in ms. If the adapter doesn't receive messages from an open subscription during this time, a resubscription will be tried. |         |   `70000`   |
+|           |            `WS_ENABLED`            |                                               Set this to `true` to enable WS support (on adapters that support this).                                               |         |   `false`   |
+|           |       `WS_SUBSCRIPTION_TTL`        |            Subscription expiration time in ms. If no new incoming requests ask for this information during this time, the subscription will be cancelled.            |         |  `120000`   |
+|           | `WS_SUBSCRIPTION_UNRESPONSIVE_TTL` | Unresponsive subscription expiration time in ms. If the adapter doesn't receive messages from an open subscription during this time, a resubscription will be tried. |         |  `120000`   |
 
 \*For the websockets to be effective, **caching needs to be enabled**

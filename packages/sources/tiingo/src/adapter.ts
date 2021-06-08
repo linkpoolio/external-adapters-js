@@ -1,13 +1,13 @@
 import { Requester, Validator } from '@chainlink/ea-bootstrap'
 import {
-  Config,
-  ExecuteWithConfig,
-  ExecuteFactory,
-  MakeWSHandler,
   AdapterRequest,
+  Config,
+  ExecuteFactory,
+  ExecuteWithConfig,
+  MakeWSHandler,
 } from '@chainlink/types'
-import { makeConfig, DEFAULT_ENDPOINT, DEFAULT_WS_API_ENDPOINT } from './config'
-import { eod, iex, top, prices } from './endpoint'
+import { DEFAULT_ENDPOINT, DEFAULT_WS_API_ENDPOINT, makeConfig } from './config'
+import { eod, iex, prices, top } from './endpoint'
 
 const inputParams = {
   endpoint: false,
@@ -99,7 +99,7 @@ export const makeWSHandler = (config?: Config): MakeWSHandler => {
     }
   }
   const getPair = (input: AdapterRequest) => {
-    const validator = new Validator(input, customParams)
+    const validator = new Validator(input, customParams, {}, false)
     if (validator.error) return
     const base = validator.validated.data.base.toLowerCase()
     const quote = validator.validated.data.quote.toLowerCase()
@@ -118,7 +118,7 @@ export const makeWSHandler = (config?: Config): MakeWSHandler => {
       subsFromMessage: (message: UpdateMessage) => message.data && getSubscription(message.data[1]),
       toResponse: (message: UpdateMessage) => {
         const result = Requester.validateResultNumber(message.data, [5])
-        return Requester.success('1', { data: { result, test: 1 } }, true)
+        return Requester.success('1', { data: { result } }, true)
       },
     }
   }
