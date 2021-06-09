@@ -3,6 +3,7 @@ import { Requester } from '@chainlink/external-adapter'
 import { assertSuccess, assertError } from '@chainlink/adapter-test-helpers'
 import { AdapterRequest } from '@chainlink/types'
 import { makeExecute } from '../src/adapter'
+import { ethers } from 'ethers'
 
 describe('execute', () => {
   const jobID = '1'
@@ -24,10 +25,16 @@ describe('execute', () => {
       it(`${req.name}`, async () => {
         const data = await execute(req.testData as AdapterRequest)
         assertSuccess({ expected: 200, actual: data.statusCode }, data, jobID)
-        assert.isAbove(data.result[0], 0)
-        assert.isAbove(data.result[1], 0)
-        assert.isAbove(data.data.result[0], 0)
-        assert.isAbove(data.data.result[1], 0)
+        ethers.utils.defaultAbiCoder
+          .decode(['uint256', 'uint256'], data.result)
+          .forEach((entry) => {
+            assert.isAbove(entry.toNumber(), 0)
+          })
+        ethers.utils.defaultAbiCoder
+          .decode(['uint256', 'uint256'], data.data.result)
+          .forEach((entry) => {
+            assert.isAbove(entry.toNumber(), 0)
+          })
       })
     })
   })

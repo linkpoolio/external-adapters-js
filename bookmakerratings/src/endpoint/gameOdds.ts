@@ -1,5 +1,6 @@
 import { Requester, Validator } from '@chainlink/external-adapter'
 import { ExecuteWithConfig, Config } from '@chainlink/types'
+import { ethers } from 'ethers'
 
 export const NAME = 'game-odds'
 
@@ -43,11 +44,12 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
 
   const response = await Requester.request(options)
 
-  const result = Object.values(response.data.odds[0][3]).map((data: any) => data[5][1][0])
+  const result = Object.values(response.data.odds[0][3]).map((data: any) => data[5][1][0] * 1000)
+  const encodedResult = ethers.utils.defaultAbiCoder.encode(['array'], result)
 
   return Requester.success(jobRunID, {
-    data: config.verbose ? { ...response.data, result } : { result },
-    result,
+    data: config.verbose ? { ...response.data, result: encodedResult } : { result: encodedResult },
+    result: encodedResult,
     status: 200,
   })
 }
