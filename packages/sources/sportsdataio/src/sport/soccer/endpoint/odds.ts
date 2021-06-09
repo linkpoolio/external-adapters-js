@@ -25,7 +25,7 @@ export type SportsDataSoccerOdds = {
   Week: number | null
   Day: Date
   DateTime: Date
-  Status: string
+  Status: string // Final | Postponed | ...
   AwayTeamId: number
   HomeTeamId: number
   AwayTeamName: string
@@ -55,6 +55,10 @@ const hasSoccerTeamName = (name: string) => (odds: SportsDataSoccerOdds) => {
 }
 
 export const execute: ExecuteWithConfig<Config> = async (request, config) => {
+  if (!config.soccerKey) {
+    throw new Error('config.soccerKey is empty')
+  }
+
   const validator = new Validator(request, customParams)
   if (validator.error) throw validator.error
 
@@ -68,9 +72,8 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
 
   // Get live game odds if `live` is a falsy value
   const url =
-    `/soccer/odds/json/` + !!live
-      ? `LiveGameOddsByDate/${date}`
-      : `PreGameOddsByDateByCompetition/${league}/${date}`
+    `/soccer/odds/json/` +
+    (live ? `LiveGameOddsByDate/${date}` : `PreGameOddsByDateByCompetition/${league}/${date}`)
 
   const params = {
     key: config.soccerKey,
@@ -79,11 +82,20 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const options = { ...config.api, params, url }
 
   const response = await Requester.request(options)
+  const { data } = response
 
   /* Filter the odds data by home and away team names if a team name was passed.
     The result key will contain the filtered list, while the data key will 
     remain untouched. */
-  response.data.result = team ? response.data.filter(hasSoccerTeamName(team)) : response.data
+  const result = team ? data.filter(hasSoccerTeamName(team)) : data
+
+  /* SportsData returns an array and restructuring the response data to an object
+    may help to prevent future errors since a Map would need to be used for array
+    indexing objects. */
+  response.data = {
+    odds: data,
+    result, // filtered data
+  }
 
   return Requester.success(jobRunID, response, config.verbose)
 }

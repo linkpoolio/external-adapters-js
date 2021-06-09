@@ -1,37 +1,39 @@
-# Chainlink External Adapter for Sportsdataio
+# Chainlink External Adapter for SportsDataIO
 
-A template to be used as an example for new [External Adapters](https://github.com/smartcontractkit/external-adapters-js)
 
-(please fill out with corresponding information)
-
-An example adapter description
 
 ### Environment Variables
 
-| Required? |  Name   |                                                        Description                                                         | Options | Defaults to |
-| :-------: | :-----: | :------------------------------------------------------------------------------------------------------------------------: | :-----: | :---------: |
-|           | API_KEY | An API key that can be obtained from the data provider's dashboard (add a ✅ in `Required?` if this parameter is required) |         |             |
+| Required? |        Name        |                Description                | Options | Defaults to |
+| :-------: | :----------------: | :---------------------------------------: | :-----: | :---------: |
+|           | NFL_SCORES_API_KEY | An API key that gives access to NFL data  |         |             |
+|           | MMA_SCORES_API_KEY | An API key that gives access to MMA data  |         |             |
+|           |   SOCCER_API_KEY   | An API key required to access Soccer data |         |             |
 
 ---
 
 ### Input Parameters
 
-| Required? |   Name   |     Description     |           Options            | Defaults to |
-| :-------: | :------: | :-----------------: | :--------------------------: | :---------: |
-|           | endpoint | The endpoint to use | [example](#Sportsdataio-Endpoint) |   example   |
+| Required? |   Name   |     Description     |     Options      | Defaults to |
+| :-------: | :------: | :-----------------: | :--------------: | :---------: |
+|     ✅     |  sport   | The endpoint to use | nfl, mma, soccer |      -      |
+|           | endpoint | The endpoint to use |                  |   example   |
 
 ---
 
-## Sportsdataio Endpoint
+## SportsDataIO Soccer
 
-An example endpoint description
+| Required? |   Name   |     Description     | Options | Defaults to |
+| :-------: | :------: | :-----------------: | :-----: | :---------: |
+|     ✅     | endpoint | The endpoint to use |  odds   |      -      |
 
-### Input Params
+### Odds - Input Params
 
-| Required? |            Name            |               Description                |       Options       | Defaults to |
-| :-------: | :------------------------: | :--------------------------------------: | :-----------------: | :---------: |
-|    ✅     | `base`, `from`, or `coin`  |   The symbol of the currency to query    | `BTC`, `ETH`, `USD` |             |
-|    ✅     | `quote`, `to`, or `market` | The symbol of the currency to convert to | `BTC`, `ETH`, `USD` |             |
+| Required? |  Name  |                        Description                        |    Options     | Defaults to |
+| :-------: | :----: | :-------------------------------------------------------: | :------------: | :---------: |
+|           | `date` |     The date of the Soccer event in YYYY-MM-DD format     |  A valid date  |    Today    |
+|           | `live` |                Used to retrieve live data                 |      true      |    false    |
+|           | `team` | Filter results to team names only including passed string | A valid string |      -      |
 
 ### Sample Input
 
@@ -39,8 +41,10 @@ An example endpoint description
 {
   "id": "1",
   "data": {
-    "base": "ETH",
-    "quote": "USD"
+    "sport": "soccer",
+    "endpoint": "odds",
+    "live": true,
+    "team": "new york"
   }
 }
 ```
@@ -51,9 +55,43 @@ An example endpoint description
 {
   "jobRunID": "278c97ffadb54a5bbb93cfec5f7b5503",
   "data": {
-    "price": 77777.77,
-    "result": 77777.77
+    "odds": [
+      // array of all games for today (since no date was passed in example above)
+    ],
+    "result": [
+      // array of games with home or away team name's including "new york"
+    ]
   },
   "statusCode": 200
 }
+```
+
+### Local Container Testing
+
+```sh
+# All commands executed from root directory
+$ yarn && yarn setup && yarn generate:docker-compose
+# Build docker container
+$ docker-compose -f docker-compose.generated.yaml build sportsdataio-adapter
+# Check adapter image tag
+$ docker image ls | grep sportsdataio-adapter
+# create .env file and add necessary api key information
+# Run container. Docker compose will automatically load .env files (as of version 1.28) at the base of project directory
+$ docker-compose -f docker-compose.generated.yaml run -p 8080:8080 sportsdataio-adapter
+# Emulate chainlink request via curl
+# No date is likely to return an empty result
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds"}}' localhost:8080
+# Request with date providing non-empty result
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","date":"2021-06-19"}}' localhost:8080
+# Filter result data down to matches with team names containing "new york"
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","date":"2021-06-19","team":"new york"}}' localhost:8080
+# Get live game odds (minimum requirements)
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","live":"true"}}' localhost:8080
+# Get live game odds (note: using historical date to ensure non-empty score data)
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","date":"2021-06-06", "live":"true"}}' localhost:8080
+# Live game odds with team name filter
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","date":"2021-06-06", "live":"true","team":"greece"}}' localhost:8080
+
+# Get NFL regular season data for 2019
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"nfl","endpoint":"scores","season":"2019REG"}}' localhost:8080
 ```
