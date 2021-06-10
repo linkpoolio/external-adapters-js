@@ -1,7 +1,6 @@
 import { AdapterRequest, Middleware } from '@chainlink/types'
 import hash from 'object-hash'
 import { Store } from 'redux'
-import { logger } from '../external-adapter'
 import { successfulRequestObserved } from './actions'
 import * as config from './config'
 import * as metrics from './metrics'
@@ -11,7 +10,8 @@ import {
   IntervalNames,
   Intervals,
   RootState,
-  selectObserved,
+  selectParticiantsHeartbeatsFor,
+  selectTotalNumberOfHeartbeatsFor,
 } from './reducer'
 export * as actions from './actions'
 export * as reducer from './reducer'
@@ -28,41 +28,24 @@ export const computeThroughput = (
   id: string,
 ): number => {
   // All observed in interval
-  const observedRequests = selectObserved(state, interval).filter((h) => !h.isWarmup)
-  const throughput = observedRequests.length + 1
+  const totalThroughtput = selectTotalNumberOfHeartbeatsFor(state, interval)
   // All of type observed in interval
-  const observedRequestsOfType = selectObserved(state, interval, id).filter((h) => !h.isWarmup)
-  const throughputOfType = observedRequestsOfType.length + 1
-  const costOfType = getAverageCost(observedRequestsOfType) || 1
+  const observedRequestsOfParticipant = selectParticiantsHeartbeatsFor(state, interval, id)
+  const throughputOfParticipant = observedRequestsOfParticipant.length + 1
+  const costOfParticipant = getAverageCost(observedRequestsOfParticipant) || 1
   // Compute max throughput by weight
-  const weight = throughputOfType / throughput
-  return maxThroughput(weight, costOfType)
+  const weight = throughputOfParticipant / totalThroughtput
+
+  return maxThroughput(weight, costOfParticipant)
 }
 
 const getAverageCost = (requests: Heartbeat[]): number => {
   if (!requests || requests.length === 0) return 0
-  return requests.reduce((totalCost, h) => totalCost + h.cost, 0) / requests.length
-}
-
-const logRemainingCapacity = (state: Heartbeats, interval: IntervalNames): void => {
-  const dataProviderRequests = selectObserved(state, interval).filter((h) => !h.isCacheHit)
-  const cost = getAverageCost(dataProviderRequests) || 1
-  const capacity = config.get().totalCapacity
-  const totalReq = dataProviderRequests.length * cost
-  const remainingCapacity = capacity - totalReq
-  const message = `Rate Limit: ${totalReq} requests made in the last minute. Capacity of ${capacity} requests/min is set`
-  if (remainingCapacity <= 0) {
-    logger.error(message)
-    return
-  }
-  if (remainingCapacity <= 0.1 * capacity) {
-    logger.warn(message)
-    return
-  }
+  return requests.reduce((totalCost, h) => totalCost + h.c, 0) / requests.length
 }
 
 const maxThroughput = (weight: number, cost: number): number => {
-  const maxAllowedCapacity = 0.9 * (config.get().totalCapacity / cost) // Interval.Minute
+  const maxAllowedCapacity = 0.9 * (config.get().totalCapacity / cost)
   return weight * maxAllowedCapacity
 }
 
@@ -92,18 +75,17 @@ export const withRateLimit =
     const requestTypeId = makeId(input)
     const maxThroughput = computeThroughput(heartbeats, IntervalNames.HOUR, requestTypeId)
     const maxAge = maxAgeFor(maxThroughput, Intervals[IntervalNames.MINUTE])
-    const result = await execute({ ...input, data: { ...input.data, rateLimitMaxAge: maxAge } })
+    const result = await execute({ ...input, rateLimitMaxAge: maxAge })
 
     store.dispatch(successfulRequestObserved(input, result))
     state = store.getState()
-    logRemainingCapacity(state.heartbeats, IntervalNames.MINUTE)
 
     const defaultLabels = {
       feed_id: input.debug?.feedId,
       participant_id: requestTypeId,
       experimental: 'true',
     }
-    const cost = parseInt(result.debug?.providerCost)
+    const cost = result.debug?.providerCost || 1
     metrics.rateLimitCreditsSpentTotal.labels(defaultLabels).inc(isNaN(cost) ? 1 : cost)
 
     return result
