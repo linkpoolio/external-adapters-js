@@ -1,27 +1,23 @@
 # Chainlink External Adapter for SportsDataIO
 
-
+Adapter got get data from Sportsdata.io
 
 ### Environment Variables
 
-| Required? |        Name        |                Description                | Options | Defaults to |
-| :-------: | :----------------: | :---------------------------------------: | :-----: | :---------: |
-|           | NFL_SCORES_API_KEY | An API key that gives access to NFL data  |         |             |
-|           | MMA_SCORES_API_KEY | An API key that gives access to MMA data  |         |             |
-|           |   SOCCER_API_KEY   | An API key required to access Soccer data |         |             |
-
----
-
+| Required? |        Name         |                  Description                  | Options | Defaults to |
+| :-------: | :-----------------: | :-------------------------------------------: | :-----: | :---------: |
+|           | NFL_SCORES_API_KEY  |   An API key that gives access to NFL data    |         |             |
+|           | MMA_SCORES_API_KEY  |   An API key that gives access to MMA data    |         |             |
+|           | SOCCER_ODDS_API_KEY | An API key required to access Soccer oddsdata |         |             |
 ### Input Parameters
 
-| Required? |   Name   |     Description     |     Options      | Defaults to |
-| :-------: | :------: | :-----------------: | :--------------: | :---------: |
-|     ✅     |  sport   | The endpoint to use | nfl, mma, soccer |      -      |
-|           | endpoint | The endpoint to use |                  |   example   |
+| Required? | Name  |   Description    |                   Options                   | Defaults to |
+| :-------: | :---: | :--------------: | :-----------------------------------------: | :---------: |
+|     ✅     | sport | The sport to use | [nfl](#NFL), [mma](#MMA), [soccer](#Soccer) |     nfl     |
 
 ---
 
-## SportsDataIO Soccer
+## Soccer
 
 | Required? |   Name   |     Description     | Options | Defaults to |
 | :-------: | :------: | :-----------------: | :-----: | :---------: |
@@ -63,3 +59,62 @@ Odds are ordered as follows: HomeTeamOdds, DrawMoneyLine, AwayMoneyLine
   "statusCode": 200
 }
 ```
+
+---
+## NFL
+
+| Required? |   Name   |      Description      |                     Options                      | Defaults to |
+| :-------: | :------: | :-------------------: | :----------------------------------------------: | :---------: |
+|           | endpoint | The endpoint to query | [schedule](#NFL-Schedule), [scores](#NFL-Scores) |  schedule   |
+
+### NFL Schedule
+
+Get the NFL schedule
+
+#### Input Parameters
+
+| Required? |  Name  |          Description          | Options | Defaults to |
+| :-------: | :----: | :---------------------------: | :-----: | :---------: |
+|     ✅     | season | The season to get events from |         |             |
+
+### NFL Scores
+
+Get NFL scores
+
+#### Input Parameters
+
+| Required? |  Name  |          Description          | Options | Defaults to |
+| :-------: | :----: | :---------------------------: | :-----: | :---------: |
+|     ✅     | season | The season to get scores from |         |             |
+
+---
+
+## MMA
+
+### Input Parameters
+
+| Required? |   Name   |      Description      |                    Options                     | Defaults to |
+| :-------: | :------: | :-------------------: | :--------------------------------------------: | :---------: |
+|     ✅     | endpoint | The endpoint to query | [schedule](#MMA-Schedule), [event](#MMA-Event) |             |
+
+### MMA Schedule
+
+Get the MMA schedule
+
+#### Input Parameters
+
+| Required? |  Name  |          Description          | Options | Defaults to |
+| :-------: | :----: | :---------------------------: | :-----: | :---------: |
+|     ✅     | league | The league to get events from |         |             |
+|     ✅     | season | The season to get events from |         |             |
+
+### MMA Event
+
+Get data on specific MMA event
+
+#### Input Parameters
+
+| Required? |  Name   |      Description      | Options | Defaults to |
+| :-------: | :-----: | :-------------------: | :-----: | :---------: |
+|     ✅     | eventId | The event ID to query |         |             |
+
