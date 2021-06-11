@@ -2,6 +2,7 @@ import { Requester } from '@chainlink/ea-bootstrap'
 import { assertError, assertSuccess } from '@chainlink/ea-test-helpers'
 import { AdapterRequest } from '@chainlink/types'
 import { makeExecute } from '../../src/adapter'
+import { ethers } from 'ethers'
 
 describe('execute', () => {
   const jobID = '1'
@@ -11,19 +12,14 @@ describe('execute', () => {
     const requests = [
       {
         name: 'id not supplied',
-        testData: { data: { base: 'ETH', quote: 'USD' } },
-      },
-      {
-        name: 'base/quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'USD' } },
-      },
-      {
-        name: 'from/to',
-        testData: { id: jobID, data: { from: 'ETH', to: 'USD' } },
-      },
-      {
-        name: 'coin/market',
-        testData: { id: jobID, data: { coin: 'ETH', market: 'USD' } },
+        testData: {
+          data: {
+            sport: 'soccer',
+            endpoint: 'odds',
+            date: '2021-06-12',
+            team: 'Sporting Kansas City',
+          },
+        },
       },
     ]
 
@@ -31,21 +27,20 @@ describe('execute', () => {
       it(`${req.name}`, async () => {
         const data = await execute(req.testData as AdapterRequest)
         assertSuccess({ expected: 200, actual: data.statusCode }, data, jobID)
-        expect(data.result).toBeGreaterThan(0)
-        expect(data.data.result).toBeGreaterThan(0)
+        expect(data.result.length).toBe(3)
       })
     })
   })
 
-  describe('error calls @integration', () => {
+  describe.skip('error calls @integration', () => {
     const requests = [
       {
-        name: 'unknown base',
-        testData: { id: jobID, data: { base: 'not_real', quote: 'USD' } },
+        name: 'unknown sport',
+        testData: { id: jobID, data: { sport: 'xyz_flying', endpoint: 'odds' } },
       },
       {
-        name: 'unknown quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'not_real' } },
+        name: 'soccer - unknown endpoint',
+        testData: { id: jobID, data: { sport: 'soccer', endpoint: 'xyz' } },
       },
     ]
 

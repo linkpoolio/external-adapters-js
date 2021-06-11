@@ -10,7 +10,8 @@ export const DEFAULT_BASE_URL = 'https://fly.sportsdata.io/v3'
 export type Config = ChainlinkConfig & {
   nflScoresKey?: string
   mmaScoresKey?: string
-  soccerKey?: string
+  soccerOddsKey?: string
+  soccerScoresKey?: string
 }
 
 export const makeConfig = (prefix?: string): Config => {
@@ -18,7 +19,9 @@ export const makeConfig = (prefix?: string): Config => {
     ...Requester.getDefaultConfig(prefix),
     nflScoresKey: util.getEnv('NFL_SCORES_API_KEY', prefix),
     mmaScoresKey: util.getEnv('MMA_SCORES_API_KEY', prefix),
-    soccerKey: util.getEnv('SOCCER_API_KEY', prefix),
+    soccerOddsKey: util.getEnv('SOCCER_ODDS_API_KEY', prefix),
+    // Scores endpoint and labeled as API Real Time by SportsData
+    // soccerScoresKey: util.getEnv('SOCCER_SCORES_API_KEY', prefix),
   }
   config.api.baseURL = config.api.baseURL || DEFAULT_BASE_URL
 
