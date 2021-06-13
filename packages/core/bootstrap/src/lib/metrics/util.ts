@@ -12,22 +12,7 @@ import { excludableAdapterRequestProperties } from '../util'
  * @returns {string} the normalized status code.
  */
 export function normalizeStatusCode(status?: number): string {
-  if (!status) {
-    return '5XX'
-  }
-
-  if (status >= 200 && status < 300) {
-    return '2XX'
-  }
-
-  if (status >= 300 && status < 400) {
-    return '3XX'
-  }
-
-  if (status >= 400 && status < 500) {
-    return '4XX'
-  }
-  return '5XX'
+  return !!status ? String(status).charAt(0) + 'XX' : '5XX'
 }
 
 /**
@@ -71,7 +56,7 @@ export const getFeedId = (input: AdapterRequest): string => {
   }
 
   const entries = Object.keys(input)
-    .filter((prop) => !excludableAdapterRequestProperties.includes(prop))
+    .filter((prop) => !excludableAdapterRequestProperties[prop])
     .map((k) => [k, input[k as keyof AdapterRequest]])
 
   return JSON.stringify(Object.fromEntries(entries))
