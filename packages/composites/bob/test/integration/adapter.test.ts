@@ -3,36 +3,30 @@ import { assertError, assertSuccess } from '@chainlink/ea-test-helpers'
 import { AdapterRequest } from '@chainlink/types'
 import { makeExecute } from '../../src/adapter'
 
+/**
+ * Running these tests requires a connection to a Bitcoin client.
+ * Not all supported methods have a test case, just enough to display capability.
+ */
+
 describe('execute', () => {
   const jobID = '1'
   const execute = makeExecute()
-
   describe('successful calls @integration', () => {
     const requests = [
       {
-        name: 'id not supplied',
-        testData: { data: { base: 'ETH', quote: 'USD' } },
-      },
-      {
-        name: 'base/quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'USD' } },
-      },
-      {
-        name: 'from/to',
-        testData: { id: jobID, data: { from: 'ETH', to: 'USD' } },
-      },
-      {
-        name: 'coin/market',
-        testData: { id: jobID, data: { coin: 'ETH', market: 'USD' } },
+        name: 'get data',
+        testData: {
+          id: jobID,
+          data: { chainId: 1, blockNumber: 1500000 },
+        },
       },
     ]
 
     requests.forEach((req) => {
       it(`${req.name}`, async () => {
         const data = await execute(req.testData as AdapterRequest)
+        console.log(data)
         assertSuccess({ expected: 200, actual: data.statusCode }, data, jobID)
-        expect(data.result).toBeGreaterThan(0)
-        expect(data.data.result).toBeGreaterThan(0)
       })
     })
   })
@@ -40,12 +34,8 @@ describe('execute', () => {
   describe('error calls @integration', () => {
     const requests = [
       {
-        name: 'unknown base',
-        testData: { id: jobID, data: { base: 'not_real', quote: 'USD' } },
-      },
-      {
-        name: 'unknown quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'not_real' } },
+        name: 'chain ID not existing',
+        testData: { id: jobID, data: { blockNumber: 'no_op' } },
       },
     ]
 
@@ -55,7 +45,7 @@ describe('execute', () => {
           await execute(req.testData as AdapterRequest)
         } catch (error) {
           const errorResp = Requester.errored(jobID, error)
-          assertError({ expected: 500, actual: errorResp.statusCode }, errorResp, jobID)
+          assertError({ expected: 400, actual: errorResp.statusCode }, errorResp, jobID)
         }
       })
     })

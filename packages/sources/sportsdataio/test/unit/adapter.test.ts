@@ -12,12 +12,12 @@ describe('execute', () => {
       { name: 'empty body', testData: {} },
       { name: 'empty data', testData: { data: {} } },
       {
-        name: 'base not supplied',
-        testData: { id: jobID, data: { quote: 'USD' } },
+        name: 'sport not supplied',
+        testData: { id: jobID, data: { endpoint: 'odds' } },
       },
       {
-        name: 'quote not supplied',
-        testData: { id: jobID, data: { base: 'ETH' } },
+        name: 'soccer - endpoint not supplied',
+        testData: { id: jobID, data: { sport: 'soccer' } },
       },
     ]
 
