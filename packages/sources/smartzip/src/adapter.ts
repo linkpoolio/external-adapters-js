@@ -16,9 +16,15 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const jobRunID = validator.validated.id
   const endpoint = validator.validated.data.endpoint
 
-  switch (endpoint.toLowerCase()) {
-    case AddressesSuggest.NAME: {
-      return await AddressesSuggest.execute(request, config)
+  switch (endpoint.toLowerCase())
+  {
+    // Uses the addresses suggest and property details endpoints to retrieve a 
+    // property's AVM
+    case 'property-avm': {
+      const { result } = await AddressesSuggest.execute(request, config)
+      // Set property_id on the request object to be used in the PropertyDetails request
+      request.data.property_id = result
+      return await PropertyDetails.execute(request, config)
     }
     case PropertyDetails.NAME: {
       return await PropertyDetails.execute(request, config)

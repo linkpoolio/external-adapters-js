@@ -9,8 +9,8 @@ describe('execute', () => {
 
   describe('validation error', () => {
     const requests = [
-      { name: 'empty body', testData: {} },
-      { name: 'empty data', testData: { data: {} } },
+      { name: 'empty body', testData: {}, expected: 400 },
+      { name: 'empty data', testData: { data: {} }, expected: 400 },
       // {
       //   name: 'invalid property id',
       //   testData: { id: jobID, data: { endpoint: 'property-details', property_id: false } },
@@ -18,12 +18,13 @@ describe('execute', () => {
     ]
 
     requests.forEach((req) => {
+      const { expected } = req
       it(`${req.name}`, async () => {
         try {
           await execute(req.testData as AdapterRequest)
         } catch (error) {
           const errorResp = Requester.errored(jobID, error)
-          assertError({ expected: 400, actual: errorResp.statusCode }, errorResp, jobID)
+          assertError({ expected, actual: errorResp.statusCode }, errorResp, jobID)
         }
       })
     })

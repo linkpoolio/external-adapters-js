@@ -19,7 +19,7 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
 
   const params = {
     property_id,
-    api_key: process.env.API_KEY || config.apiKey,
+    api_key: config.apiKey,
   }
 
   const options = { ...config.api, params, url }

@@ -1,4 +1,4 @@
-import { Requester, Validator } from '@chainlink/ea-bootstrap'
+import { Requester, Validator, AdapterError } from '@chainlink/ea-bootstrap'
 import { Config, ExecuteWithConfig } from '@chainlink/types'
 
 export const NAME = 'addresses-suggest'
@@ -6,7 +6,8 @@ export const NAME = 'addresses-suggest'
 const customError = (data: any) => data.Response === 'Error'
 
 const customParams = {
-  street: true,
+  address: false,
+  street: false,
   city: false,
   state: false,
   zip: false,
@@ -14,7 +15,8 @@ const customParams = {
 
 interface SmartZipAddress {
   [index: string]: string | number | undefined
-  street: string
+  address?: string,
+  street?: string
   city?: string
   state?: string
   zip?: string | number
@@ -31,19 +33,56 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   if (validator.error) throw validator.error
 
   const jobRunID = validator.validated.id
-  const { street, state, city, zip } = validator.validated.data
+  const { address, street, state, city, zip } = validator.validated.data
   const url = `addresses/suggest.json`
 
   const params = {
-    address: createAddress({ street, state, city, zip }),
-    api_key: process.env.API_KEY || config.apiKey,
+    address: address || createAddress({ street, state, city, zip }),
+    api_key: config.apiKey,
+  }
+
+  if (!params.address)
+  {
+    throw new AdapterError({
+      jobRunID,
+      message: `Invalid address: ${params.address}`,
+      statusCode: 400,
+    })
   }
 
   const options = { ...config.api, params, url }
 
+  // When a single result is returned from the SmartZip API, the properties object
+  // will follow the structure of a single property:
+  //    properties: { address: string, id: number }
+  // When multiple properties are found by the search, the properties object will
+  // become a list property objects:
+  //    properties: [ 
+  //      { address: string, id: number },
+  //      ...
+  //      { address: string, id: number }
+  //    ]
   const response = await Requester.request(options, customError)
-  console.log(response)
-  response.data.result = Requester.validateResultNumber(response.data.analytics, ['avm'])
+  const { response_code, properties } = response.data
+  
+  if (response_code !== 'SUCCESS')
+  {
+    throw new AdapterError({
+      jobRunID,
+      message: `SmartZip API response ${response_code}`,
+      statusCode: 400,
+    })
+  } else if (Array.isArray(properties))
+  {
+    throw new AdapterError({
+      jobRunID,
+      message: `SmartZip API returned ${properties.length} results, expected 1`,
+      statusCode: 400,
+    })
+  }
+
+  // Return the SmartZip property id
+  response.data.result = Requester.validateResultNumber(properties, ['id'])
 
   return Requester.success(jobRunID, response, config.verbose)
 }
