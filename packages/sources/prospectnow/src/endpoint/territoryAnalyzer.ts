@@ -50,7 +50,7 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
     },
     url,
     headers: {
-      'api-key': process.env.API_KEY,
+      'api-key': config.apiKey,
       'Content-Type': 'application/json',
     },
   }

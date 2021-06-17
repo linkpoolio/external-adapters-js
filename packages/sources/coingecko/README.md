@@ -1,12 +1,5 @@
 # Chainlink External Adapter for CoinGecko
 
-### Environment Variables
-
-| Required? |  Name   |             Description             | Options | Defaults to |
-| :-------: | :-----: | :---------------------------------: | :-----: | :---------: |
-|           | API_KEY | An optional API key for the Pro API |         |             |
-
-
 ### Input Parameters
 
 | Required? |   Name   |     Description     |                                                                         Options                                                                         | Defaults to |

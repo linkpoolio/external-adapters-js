@@ -1,18 +1,10 @@
-import {
-  AdapterMetricsMeta,
-  AdapterRequest,
-  Execute,
-  ExecuteSync,
-  MakeWSHandler,
-  Middleware,
-} from '@chainlink/types'
+import { AdapterRequest, Execute, ExecuteSync, MakeWSHandler, Middleware } from '@chainlink/types'
 import { combineReducers, Store } from 'redux'
 import { defaultOptions, redactOptions, withCache } from './lib/cache'
 import * as cacheWarmer from './lib/cache-warmer'
 import { WARMUP_REQUEST_ID } from './lib/cache-warmer/config'
 import { AdapterError, logger as Logger, Requester, Validator } from './lib/external-adapter'
 import * as metrics from './lib/metrics'
-import { getFeedId } from './lib/metrics/util'
 import * as rateLimit from './lib/rate-limit'
 import * as server from './lib/server'
 import { configureStore } from './lib/store'
@@ -83,16 +75,10 @@ const withLogger: Middleware = async (execute) => async (input: AdapterRequest) 
 }
 
 const withMetrics: Middleware = async (execute) => async (input: AdapterRequest) => {
-  const feedId = getFeedId(input)
-  const metricsMeta: AdapterMetricsMeta = {
-    feedId: metrics.util.getFeedId(input),
-  }
-
   const recordMetrics = () => {
     const labels: Parameters<typeof metrics.httpRequestsTotal.labels>[0] = {
-      is_cache_warming: String(input.id === WARMUP_REQUEST_ID),
+      isCacheWarming: String(input.id === WARMUP_REQUEST_ID),
       method: 'POST',
-      feed_id: feedId,
     }
     const end = metrics.httpRequestDurationSeconds.startTimer()
 
@@ -106,14 +92,14 @@ const withMetrics: Middleware = async (execute) => async (input: AdapterRequest)
 
   const record = recordMetrics()
   try {
-    const result = await execute({ ...input, metricsMeta })
+    const result = await execute(input)
     record(
       result.statusCode,
       result.data.maxAge || (result as any).maxAge
         ? metrics.HttpRequestType.CACHE_HIT
         : metrics.HttpRequestType.DATA_PROVIDER_HIT,
     )
-    return { ...result, metricsMeta: { ...result.metricsMeta, ...metricsMeta } }
+    return result
   } catch (error) {
     record()
     throw error
@@ -121,7 +107,10 @@ const withMetrics: Middleware = async (execute) => async (input: AdapterRequest)
 }
 
 export const withDebug: Middleware = async (execute) => async (input: AdapterRequest) => {
-  const result = await execute(input)
+  const debug = {
+    feedId: metrics.util.getFeedId(input),
+  }
+  const result = await execute({ ...input, debug })
   if (!util.isDebug()) {
     const { debug, ...rest } = result
     return rest

@@ -1,6 +1,5 @@
 import LRU from 'lru-cache'
 import { parseBool } from '../util'
-import { CacheEntry } from './types'
 
 // Options
 const DEFAULT_CACHE_MAX_ITEMS = 500
@@ -8,50 +7,29 @@ const DEFAULT_CACHE_MAX_AGE = 1000 * 60 * 2 // 2 minutes
 const DEFAULT_CACHE_UPDATE_AGE_ON_GET = false
 
 const env = process.env
-export interface LocalOptions {
-  type: 'local'
-  max: number
-  maxAge: number
-  updateAgeOnGet: boolean
-}
-export const defaultOptions = (): LocalOptions =>
-  ({
-    type: 'local',
-    max: Number(env.CACHE_MAX_ITEMS) || DEFAULT_CACHE_MAX_ITEMS,
-    maxAge: Number(env.CACHE_MAX_AGE) || DEFAULT_CACHE_MAX_AGE,
-    updateAgeOnGet: parseBool(env.CACHE_UPDATE_AGE_ON_GET) || DEFAULT_CACHE_UPDATE_AGE_ON_GET,
-  } as const)
+export const defaultOptions = () => ({
+  max: Number(env.CACHE_MAX_ITEMS) || DEFAULT_CACHE_MAX_ITEMS,
+  maxAge: Number(env.CACHE_MAX_AGE) || DEFAULT_CACHE_MAX_AGE,
+  updateAgeOnGet: parseBool(env.CACHE_UPDATE_AGE_ON_GET) || DEFAULT_CACHE_UPDATE_AGE_ON_GET,
+})
 // Options without sensitive data
 export const redactOptions = (opts: any) => opts
 
-type CacheOptions = Omit<
-  LRU.Options<string, CacheEntry | boolean>,
-  'max' | 'maxAge' | 'updateAgeOnGet'
-> &
-  ReturnType<typeof defaultOptions>
 export class LocalLRUCache {
-  options: CacheOptions
-  client: LRU<string, CacheEntry | boolean>
+  options: LRU.Options<unknown, unknown>
+  client: LRU<unknown, unknown>
 
-  constructor(options: CacheOptions) {
+  constructor(options: LRU.Options<unknown, unknown>) {
     this.options = options
     this.client = new LRU(options)
   }
 
-  setResponse(key: string, value: any, maxAge: number) {
+  set(key: string, value: any, maxAge: number) {
     return this.client.set(key, value, maxAge)
   }
 
-  setFlightMarker(key: string, maxAge: number) {
-    return this.client.set(key, true, maxAge)
-  }
-
-  async getResponse(key: string): Promise<CacheEntry | undefined> {
-    return this.client.get(key) as CacheEntry | undefined
-  }
-
-  async getFlightMarker(key: string): Promise<boolean> {
-    return this.client.get(key) as boolean
+  get(key: string) {
+    return this.client.get(key)
   }
 
   del(key: string) {

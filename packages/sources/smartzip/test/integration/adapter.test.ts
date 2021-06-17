@@ -8,38 +8,109 @@ describe('execute', () => {
   const execute = makeExecute()
 
   describe('successful calls @integration', () => {
-    const requests = [
-      {
-        name: 'get property avm',
-        testData: { id: jobID, data: { endpoint: 'property-details', property_id: 100000125583 } },
-      },
-    ]
+    it('property-details: get property avm', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'property-details',
+          property_id: 100000125583
+        }
+      }
+      const res = await execute(req as AdapterRequest)
+      assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
 
-    requests.forEach((req) => {
-      it(`${req.name}`, async () => {
-        const data = await execute(req.testData as AdapterRequest)
-        assertSuccess({ expected: 200, actual: data.statusCode }, data, jobID)
-        expect(data.result).toBeGreaterThan(0)
-        expect(data.data.result).toBeGreaterThan(0)
-      })
+      expect(res.result).toBeGreaterThan(0)
+      expect(res.data.result).toBeGreaterThan(0)
+    })
+
+    it('multi: get property avm by address', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'property-avm',
+          address: '1200 broadway 91504'
+        },
+      }
+      const res = await execute(req as AdapterRequest)
+      assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
+
+      expect(res.result).toBeGreaterThan(0)
+      expect(res.data.result).toBeGreaterThan(0)
+    })
+
+    it('multi: get address avm by street + zip', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'property-avm',
+          street: '1200 broadway',
+          zip: 91504
+        },
+      }
+      const res = await execute(req as AdapterRequest)
+      assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
+
+      expect(res.result).toBeGreaterThan(0)
+      expect(res.data.result).toBeGreaterThan(0)
     })
   })
 
   describe('error calls @integration', () => {
-    const requests = [
-      {
-        name: 'invalid property id',
-        testData: { id: jobID, data: { endpoint: 'property-details', property_id: 100000000000 } },
-      },
-    ]
 
-    requests.forEach((req) => {
-      it(`${req.name}`, async () => {
+    describe('property-details', () => {
+      it('invalid property id', async () => {
+        const req = {
+          id: jobID,
+          data: {
+            endpoint: 'property-details',
+            property_id: 100000000000
+          }
+        }
+
         try {
-          await execute(req.testData as AdapterRequest)
+          await execute(req as AdapterRequest)
         } catch (error) {
           const errorResp = Requester.errored(jobID, error)
           assertError({ expected: 500, actual: errorResp.statusCode }, errorResp, jobID)
+        }
+      })
+    })
+    
+    describe('addresses-suggest', () => {
+      it('empty address', async () => {
+        const req = {
+          id: jobID,
+          data: {
+            endpoint: 'property-avm',
+          },
+        }
+
+        try
+        {
+          await execute(req as AdapterRequest)
+        } catch (err)
+        {
+          const errorResp = Requester.errored(jobID, err)
+          assertError({ expected: 400, actual: errorResp.statusCode }, errorResp, jobID)
+        }
+      })
+
+      it('returned multiple properties', async () => {
+        const req = {
+          id: jobID,
+          data: {
+            endpoint: 'property-avm',
+            street: '1200 broadway'
+          },
+        }
+
+        try
+        {
+          await execute(req as AdapterRequest)
+        } catch (err)
+        {
+          const errorResp = Requester.errored(jobID, err)
+          assertError({ expected: 400, actual: errorResp.statusCode }, errorResp, jobID)
         }
       })
     })

@@ -6,6 +6,7 @@ export const DEFAULT_BASE_URL = 'https://api.prospectnow.com/'
 
 export const makeConfig = (prefix?: string): Config => {
   const config = Requester.getDefaultConfig(prefix)
-  config.api.baseURL = config.api.baseURL || DEFAULT_BASE_URL
+  config.api.baseURL = config.api.baseURL || DEFAULT_BASE_URL,
+  config.apiKey = util.getEnv('API_KEY', prefix),
   return config
 }

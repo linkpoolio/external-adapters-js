@@ -72,7 +72,6 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
     ids,
     vs_currencies: quote,
     include_market_cap: path === Paths.MarketCap,
-    x_cg_pro_api_key: config.apiKey,
   }
 
   const options = {

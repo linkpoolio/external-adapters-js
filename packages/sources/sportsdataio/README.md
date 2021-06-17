@@ -1,23 +1,27 @@
 # Chainlink External Adapter for SportsDataIO
 
-Adapter got get data from Sportsdata.io
+
 
 ### Environment Variables
 
-| Required? |        Name         |                  Description                  | Options | Defaults to |
-| :-------: | :-----------------: | :-------------------------------------------: | :-----: | :---------: |
-|           | NFL_SCORES_API_KEY  |   An API key that gives access to NFL data    |         |             |
-|           | MMA_SCORES_API_KEY  |   An API key that gives access to MMA data    |         |             |
-|           | SOCCER_ODDS_API_KEY | An API key required to access Soccer oddsdata |         |             |
-### Input Parameters
-
-| Required? | Name  |   Description    |                   Options                   | Defaults to |
-| :-------: | :---: | :--------------: | :-----------------------------------------: | :---------: |
-|     ✅     | sport | The sport to use | [nfl](#NFL), [mma](#MMA), [soccer](#Soccer) |     nfl     |
+| Required? |        Name        |                Description                | Options | Defaults to |
+| :-------: | :----------------: | :---------------------------------------: | :-----: | :---------: |
+|           | NFL_SCORES_API_KEY | An API key that gives access to NFL data  |         |             |
+|           | MMA_SCORES_API_KEY | An API key that gives access to MMA data  |         |             |
+|           |   SOCCER_API_KEY   | An API key required to access Soccer data |         |             |
 
 ---
 
-## Soccer
+### Input Parameters
+
+| Required? |   Name   |     Description     |     Options      | Defaults to |
+| :-------: | :------: | :-----------------: | :--------------: | :---------: |
+|     ✅     |  sport   | The endpoint to use | nfl, mma, soccer |      -      |
+|           | endpoint | The endpoint to use |                  |   example   |
+
+---
+
+## SportsDataIO Soccer
 
 | Required? |   Name   |     Description     | Options | Defaults to |
 | :-------: | :------: | :-----------------: | :-----: | :---------: |
@@ -29,7 +33,7 @@ Adapter got get data from Sportsdata.io
 | :-------: | :----: | :-------------------------------------------------------: | :------------: | :---------: |
 |           | `date` |     The date of the Soccer event in YYYY-MM-DD format     |  A valid date  |    Today    |
 |           | `live` |                Used to retrieve live data                 |      true      |    false    |
-|     ✅     | `team` | Filter results to team names only including passed string | A valid string |      -      |
+|           | `team` | Filter results to team names only including passed string | A valid string |      -      |
 
 ### Sample Input
 
@@ -39,82 +43,55 @@ Adapter got get data from Sportsdata.io
   "data": {
     "sport": "soccer",
     "endpoint": "odds",
-    "date": "2021-06-12",
-    "team": "Sporting Kansas City"
+    "live": true,
+    "team": "new york"
   }
 }
 ```
 
 ### Sample Output
 
-Odds are ordered as follows: HomeTeamOdds, DrawMoneyLine, AwayMoneyLine
-
 ```json
 {
   "jobRunID": "278c97ffadb54a5bbb93cfec5f7b5503",
   "data": {
-    "result": [-1500,3650,3100]
+    "odds": [
+      // array of all games for today (since no date was passed in example above)
+    ],
+    "result": [
+      // array of games with home or away team name's including "new york"
+    ]
   },
-  "result":[-1500,3650,3100],
   "statusCode": 200
 }
 ```
 
----
-## NFL
+### Local Container Testing
 
-| Required? |   Name   |      Description      |                     Options                      | Defaults to |
-| :-------: | :------: | :-------------------: | :----------------------------------------------: | :---------: |
-|           | endpoint | The endpoint to query | [schedule](#NFL-Schedule), [scores](#NFL-Scores) |  schedule   |
+```sh
+# All commands executed from root directory
+$ yarn && yarn setup && yarn generate:docker-compose
+# Build docker container
+$ docker-compose -f docker-compose.generated.yaml build sportsdataio-adapter
+# Check adapter image tag
+$ docker image ls | grep sportsdataio-adapter
+# create .env file and add necessary api key information
+# Run container. Docker compose will automatically load .env files (as of version 1.28) at the base of project directory
+$ docker-compose -f docker-compose.generated.yaml run -p 8080:8080 sportsdataio-adapter
+# Emulate chainlink request via curl
+# No date is likely to return an empty result
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds"}}' localhost:8080
+# Request with date providing non-empty result
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","date":"2021-06-19"}}' localhost:8080
+# Filter result data down to matches with team names containing "new york"
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","date":"2021-06-19","team":"new york"}}' localhost:8080
+# Get live game odds (minimum requirements)
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","live":"true"}}' localhost:8080
+# Get live game odds (note: using historical date to ensure non-empty score data)
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","date":"2021-06-06", "live":"true"}}' localhost:8080
+# Live game odds with team name filter
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"soccer","endpoint":"odds","date":"2021-06-06", "live":"true","team":"greece"}}' localhost:8080
 
-### NFL Schedule
-
-Get the NFL schedule
-
-#### Input Parameters
-
-| Required? |  Name  |          Description          | Options | Defaults to |
-| :-------: | :----: | :---------------------------: | :-----: | :---------: |
-|     ✅     | season | The season to get events from |         |             |
-
-### NFL Scores
-
-Get NFL scores
-
-#### Input Parameters
-
-| Required? |  Name  |          Description          | Options | Defaults to |
-| :-------: | :----: | :---------------------------: | :-----: | :---------: |
-|     ✅     | season | The season to get scores from |         |             |
-
----
-
-## MMA
-
-### Input Parameters
-
-| Required? |   Name   |      Description      |                    Options                     | Defaults to |
-| :-------: | :------: | :-------------------: | :--------------------------------------------: | :---------: |
-|     ✅     | endpoint | The endpoint to query | [schedule](#MMA-Schedule), [event](#MMA-Event) |             |
-
-### MMA Schedule
-
-Get the MMA schedule
-
-#### Input Parameters
-
-| Required? |  Name  |          Description          | Options | Defaults to |
-| :-------: | :----: | :---------------------------: | :-----: | :---------: |
-|     ✅     | league | The league to get events from |         |             |
-|     ✅     | season | The season to get events from |         |             |
-
-### MMA Event
-
-Get data on specific MMA event
-
-#### Input Parameters
-
-| Required? |  Name   |      Description      | Options | Defaults to |
-| :-------: | :-----: | :-------------------: | :-----: | :---------: |
-|     ✅     | eventId | The event ID to query |         |             |
-
+# Get NFL regular season data for 2019
+$ curl -s -i -X POST -H "Content-Type: application/json" -d '{"id":"1","data":{"sport":"nfl","endpoint":"scores","season":"2019REG"}}' localhost:8080
+```
