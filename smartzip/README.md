@@ -1,6 +1,6 @@
 # Chainlink External Adapter for SmartZip
 
-Use SmartZip's Property Details API endpoint to retrieve the value of a home.
+Use SmartZip's API to retrieve the value of a home.
 
 ### Environment Variables
 
@@ -12,33 +12,68 @@ Use SmartZip's Property Details API endpoint to retrieve the value of a home.
 
 ### Input Parameters
 
-| Required? |   Name   |      Description      |      Options       | Defaults to |
-| :-------: | :------: | :-------------------: | :----------------: | :---------: |
-|           | endpoint | Endpoint to direct to | 'property-details' |     n/a     |
+| Required? |   Name   |   Description    |                               Options                                | Defaults to |
+| :-------: | :------: | :--------------: | :------------------------------------------------------------------: | :---------: |
+|     ✅     | endpoint | Adapter endpoint | [property-avm](#Property-AVM), [property-details](#Property-Details) |             |
 
 ---
 
-## Property Details Endpoint
+## Property AVM
 
-Returns the AVM price
+Returns the AVM price of a property by address.
+
+### Input Params
+
+The endpoint prioritizes the `address` paramter, otherwise, if no `address` is
+passed, one will attempt to be created from the passed `street`, `city`, 
+`state`, and `zip`.
+
+When passing or creating an address, the minimum amount of data to isolate a
+single address is all that is needed. For example, `1200 broadway XXXXX` is
+sufficient enough without a state and zip code to return a single result.
+
+| Required? |  Name   |   Description    |    Options     | Defaults to |
+| :-------: | :-----: | :--------------: | :------------: | :---------: |
+|           | address | Property address |     string     |  undefined  |
+|           | street  | Property street  |     string     |  undefined  |
+|           |  city   |  Property city   |     string     |  undefined  |
+|           |  state  |  Property state  |     string     |  undefined  |
+|           |   zip   |   Property zip   | string, number |  undefined  |
+
+---
+
+## Property Details
+
+Returns the AVM price of a property by a given SmartZip property ID.
 
 ### Input Params
 
 | Required? |     Name      |                 Description                 | Options | Defaults to |
 | :-------: | :-----------: | :-----------------------------------------: | :-----: | :---------: |
-|     ✅     | `property_id` | The ID of the property assigned by SmartZip |         |     n/a     |
+|     ✅     | `property_id` | The ID of the property assigned by SmartZip | number  |  undefined  |
 
 
 ### Sample Input
 
-NOTE: that the property id in this example will fail if used in a real request.
+NOTE: that `XXXXX` is meant to be a real zip code.
 
 ```json
 {
   "id": "1",
   "data": {
-    "endpoint": "property-details",
-    "property_id": "100000000000"
+    "endpoint": "property-avm",
+    "address": "1200 broadway XXXXX"
+  }
+}
+```
+
+```json
+{
+  "id": "1",
+  "data": {
+    "endpoint": "property-avm",
+    "street": "1200 broadway",
+    "zip": "XXXXX"
   }
 }
 ```
