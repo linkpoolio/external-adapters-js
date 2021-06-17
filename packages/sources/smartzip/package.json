@@ -23,15 +23,14 @@
     "clean": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
     "prepack": "yarn build",
     "build": "tsc -b",
-    "server": "node -e 'require(\"./index.js\").server()' -r dotenv/config",
-    "server:dist": "node -e 'require(\"./dist/index.js\").server()' -r dotenv/config",
+    "server": "node -e 'require(\"./index.js\").server()'",
+    "server:dist": "node -e 'require(\"./dist/index.js\").server()'",
     "start": "yarn server:dist",
     "test": "jest"
   },
   "dependencies": {
     "@chainlink/ea-bootstrap": "*",
     "@chainlink/ea-test-helpers": "*",
-    "dotenv": "^9.0.2",
     "tslib": "^2.1.0"
   },
   "devDependencies": {
