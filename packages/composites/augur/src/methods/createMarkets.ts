@@ -52,7 +52,7 @@ export const execute: ExecuteWithConfig<Config> = async (input, config) => {
   }
 
   Logger.debug(`Augur: Got ${events.length} events from data provider`)
-  let skipStartBuffer = 0, skipNoTeams = 0, cantCreate = 0, skipTBDTeams = 0
+  let skipTBD = 0, skipStartBuffer = 0, skipNoTeams = 0, cantCreate = 0, skipTBDTeams = 0
 
   // filter markets and build payloads for market creation
   const packed = [];
@@ -61,6 +61,11 @@ export const execute: ExecuteWithConfig<Config> = async (input, config) => {
     if ((startTime - Date.now()) / 1000 < startBuffer) {
       // markets would end too soon
       skipStartBuffer++
+      continue
+    }
+
+    if((event.event_status_detail || "").toUpperCase() === 'TBD') {
+      skipTBD++
       continue
     }
 
@@ -100,6 +105,7 @@ export const execute: ExecuteWithConfig<Config> = async (input, config) => {
 
   Logger.debug(`Augur: Skipping ${skipStartBuffer} due to startBuffer`)
   Logger.debug(`Augur: Skipping ${skipNoTeams} due to no teams`)
+  Logger.debug(`Augur: Skipping ${skipTBD} due to TBD events`)
   Logger.debug(`Augur: Skipping ${skipTBDTeams} due to TBD teams`)
   Logger.debug(`Augur: Skipping ${cantCreate} due to no market to create`)
   Logger.debug(`Augur: Prepared to create ${packed.length} events`)

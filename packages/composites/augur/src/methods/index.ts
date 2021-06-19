@@ -21,6 +21,7 @@ export interface Event {
   }
   score: {
     event_status: string
+    event_status_detail: string
     score_home: number
     score_away: number
   }
