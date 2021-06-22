@@ -3,12 +3,12 @@ import { Config, ExecuteWithConfig, ExecuteFactory } from '@chainlink/types'
 import { makeConfig } from './config'
 
 
-export interface AzuroItem {
-  id:        number;
-  odd1:      number;
-  odd2:      number;
-  startDate: number;
-  ipfsHash:  string;
+export interface AzuroEvent {
+  id: number
+  odd1: number
+  odd2: number
+  startDate: number
+  ipfsHash: string
 }
 
 
@@ -53,8 +53,7 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const { data } = response
 
   if (data.length === 0) {
-    // TODO: ensure empty array doesn't cause transaction
-    return Requester.success(jobRunID, [], config.verbose)
+    return Requester.errored(jobRunID, "API returned empty result")
   }
   response.data.result = Object.values(response.data)
 

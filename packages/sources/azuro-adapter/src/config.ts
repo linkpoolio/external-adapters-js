@@ -4,10 +4,8 @@ import { Config } from '@chainlink/types'
 export const NAME = 'AZURO'
 
 const pickBaseUrl: Record<string, string> = {
-  // dev: '',
   test: 'http://artyrian.site',
-  // prod: 'https://azuro.org'
-  prod: 'https://localhost.org'
+  prod: 'https://azuro.org'
 }
 
 export const makeConfig = (prefix?: string): Config => {
