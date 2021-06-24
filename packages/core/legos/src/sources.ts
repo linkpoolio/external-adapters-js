@@ -13,9 +13,11 @@ import * as blockchain_com from '@chainlink/blockchain.com-adapter'
 import * as blockchair from '@chainlink/blockchair-adapter'
 import * as blockcypher from '@chainlink/blockcypher-adapter'
 import * as blockstream from '@chainlink/blockstream-adapter'
+import * as bookmakerratings from '@chainlink/bookmakerratings-adapter'
 import * as bravenewcoin from '@chainlink/bravenewcoin-adapter'
 import * as btc_com from '@chainlink/btc.com-adapter'
 import * as cfbenchmarks from '@chainlink/cfbenchmarks-adapter'
+import * as ciphertrace from '@chainlink/ciphertrace-adapter'
 import * as coinapi from '@chainlink/coinapi-adapter'
 import * as coinbase from '@chainlink/coinbase-adapter'
 import * as coincodex from '@chainlink/coincodex-adapter'
@@ -24,6 +26,7 @@ import * as coinlore from '@chainlink/coinlore-adapter'
 import * as coinmarketcap from '@chainlink/coinmarketcap-adapter'
 import * as coinpaprika from '@chainlink/coinpaprika-adapter'
 import * as coinranking from '@chainlink/coinranking-adapter'
+import * as connexun from '@chainlink/connexun-adapter'
 import * as covid_tracker from '@chainlink/covid-tracker-adapter'
 import * as cryptoapis from '@chainlink/cryptoapis-adapter'
 import * as cryptocompare from '@chainlink/cryptocompare-adapter'
@@ -32,6 +35,7 @@ import * as cryptomkt from '@chainlink/cryptomkt-adapter'
 import * as currencylayer from '@chainlink/currencylayer-adapter'
 import * as deribit from '@chainlink/deribit-adapter'
 import * as dns_query from '@chainlink/dns-query-adapter'
+import * as dnsproof from '@chainlink/dnsproof-adapter'
 import * as dwolla from '@chainlink/dwolla-adapter'
 import * as dxfeed from '@chainlink/dxfeed-adapter'
 import * as dxfeed_secondary from '@chainlink/dxfeed-secondary-adapter'
@@ -45,6 +49,7 @@ import * as finnhub from '@chainlink/finnhub-adapter'
 import * as fixer from '@chainlink/fixer-adapter'
 import * as fmpcloud from '@chainlink/fmpcloud-adapter'
 import * as genesis_adapter from '@chainlink/genesis-volatility-adapter'
+import * as genesisvolatility from '@chainlink/genesisvolatility-adapter'
 import * as geodb from '@chainlink/geodb-adapter'
 import * as iex_adapter from '@chainlink/iex-cloud-adapter'
 import * as intrinio from '@chainlink/intrinio-adapter'
@@ -66,9 +71,11 @@ import * as paxos from '@chainlink/paxos-adapter'
 import * as paypal from '@chainlink/paypal-adapter'
 import * as poa_adapter from '@chainlink/poa-gasprice-adapter'
 import * as polygon from '@chainlink/polygon-adapter'
+import * as prospectnow from '@chainlink/prospectnow-adapter'
 import * as reduce from '@chainlink/reduce-adapter'
 import * as renvm_adapter_address from '@chainlink/renvm-address-set-adapter'
 import * as satoshitango from '@chainlink/satoshitango-adapter'
+import * as smartzip from '@chainlink/smartzip-adapter'
 import * as sochain from '@chainlink/sochain-adapter'
 import * as sportsdataio from '@chainlink/sportsdataio-adapter'
 import * as stasis from '@chainlink/stasis-adapter'
@@ -80,6 +87,7 @@ import * as tradingeconomics from '@chainlink/tradingeconomics-adapter'
 import * as trueusd from '@chainlink/trueusd-adapter'
 import * as twelvedata from '@chainlink/twelvedata-adapter'
 import * as unibit from '@chainlink/unibit-adapter'
+import * as watchsignals from '@chainlink/watchsignals-adapter'
 import * as wbtc_adapter_address from '@chainlink/wbtc-address-set-adapter'
 import * as xbto from '@chainlink/xbto-adapter'
 
@@ -99,9 +107,11 @@ export default {
   blockchair,
   blockcypher,
   blockstream,
+  bookmakerratings,
   bravenewcoin,
   btc_com,
   cfbenchmarks,
+  ciphertrace,
   coinapi,
   coinbase,
   coincodex,
@@ -110,6 +120,7 @@ export default {
   coinmarketcap,
   coinpaprika,
   coinranking,
+  connexun,
   covid_tracker,
   cryptoapis,
   cryptocompare,
@@ -118,6 +129,7 @@ export default {
   currencylayer,
   deribit,
   dns_query,
+  dnsproof,
   dwolla,
   dxfeed,
   dxfeed_secondary,
@@ -131,6 +143,7 @@ export default {
   fixer,
   fmpcloud,
   genesis_adapter,
+  genesisvolatility,
   geodb,
   iex_adapter,
   intrinio,
@@ -152,9 +165,11 @@ export default {
   paypal,
   poa_adapter,
   polygon,
+  prospectnow,
   reduce,
   renvm_adapter_address,
   satoshitango,
+  smartzip,
   sochain,
   sportsdataio,
   stasis,
@@ -166,6 +181,7 @@ export default {
   trueusd,
   twelvedata,
   unibit,
+  watchsignals,
   wbtc_adapter_address,
   xbto,
 }

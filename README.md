@@ -6,35 +6,37 @@ This repository contains the source code for Chainlink external adapters.
 
 ## Table of Contents
 
-1. [Getting Started](#Getting-Started)
-   - [Requirements](#Requirements)
-   - [Install Dependencies](#Install)
-   - [Setup](#Setup)
-   - [Folder Structure](#Folder-Structure)
-2. [List of External Adapters](#External-Adapters-List)
-3. [Running](#Running)
-   - [Configuration](#Requirements)
-   - [HTTP server](#HTTP-server)
-   - [Docker](#Docker)
-   - [Single-Command Script](#Single-Command-Script)
-4. [Advanced Features](#Advanced-Features)
-   - [Performance](#Performance)
-     - [Caching](#Caching)
-     - [Rate Limiting](#Rate-Limiting)
-     - [Cache Warming](#Cache-Warming)
-   - [Multiple API Key Support](#Multiple-API-Key-Support)
-   - [Bridge URL Query String Parameters](#Bridge-URL-Query-String-Parameters)
-   - [Ticker Overrides](#Ticker-Overrides)
-5. [Deployment](#Deployment)
-   - [Container Images](#Container-Images)
-   - [Running from ECR](#Running-from-ECR)
-6. [Contributing](#Contributing)
-   - [Create a new adapter](#Create-a-new-adapter)
-   - [HTTP server](#HTTP-server)
-   - [Input](#Input)
-   - [Output](#Output)
-   - [Common Patterns](#Common-Patterns)
-   - [Testing](#Testing)
+- [Chainlink External Adapters (TypeScript)](#chainlink-external-adapters-typescript)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [Requirements](#requirements)
+    - [Install](#install)
+    - [Setup](#setup)
+    - [Folder Structure](#folder-structure)
+  - [External Adapters List](#external-adapters-list)
+  - [Running](#running)
+    - [Configuration](#configuration)
+    - [HTTP server](#http-server)
+    - [Docker](#docker)
+    - [Single-Command Script](#single-command-script)
+  - [Advanced Features](#advanced-features)
+    - [Performance](#performance)
+      - [Caching](#caching)
+      - [Rate Limiting](#rate-limiting)
+      - [Cache Warming](#cache-warming)
+    - [Multiple API Key Support](#multiple-api-key-support)
+    - [Bridge URL Query String Parameters](#bridge-url-query-string-parameters)
+    - [Ticker Overrides](#ticker-overrides)
+  - [Deployment](#deployment)
+    - [Container Images](#container-images)
+    - [Running from ECR](#running-from-ecr)
+  - [Contributing](#contributing)
+    - [Create a new adapter](#create-a-new-adapter)
+    - [Input](#input)
+    - [Output](#output)
+    - [Common Patterns](#common-patterns)
+    - [Common Issues](#common-issues)
+    - [Testing](#testing)
 
 ---
 
@@ -364,7 +366,7 @@ yarn new [template-type] [name-of-adapter]
 For example
 
 ```
-yarn new source my-new-adapter
+yarn new source myprodata
 ```
 
 _If on a Mac, this requires `gnu-sed` to be installed and set as the default for the command `sed`._
