@@ -227,6 +227,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/sources/coinranking"
       },
       {
+        "name": "@chainlink/connexun-adapter",
+        "reference": "workspace:packages/sources/connexun"
+      },
+      {
         "name": "@chainlink/covid-tracker-adapter",
         "reference": "workspace:packages/sources/covid-tracker"
       },
@@ -535,6 +539,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@chainlink/coinpaprika-adapter", ["workspace:packages/sources/coinpaprika"]],
       ["@chainlink/coinranking-adapter", ["workspace:packages/sources/coinranking"]],
       ["@chainlink/conflux-adapter", ["workspace:packages/targets/conflux"]],
+      ["@chainlink/connexun-adapter", ["workspace:packages/sources/connexun"]],
       ["@chainlink/covid-tracker-adapter", ["workspace:packages/sources/covid-tracker"]],
       ["@chainlink/crypto-volatility-index-adapter", ["workspace:packages/composites/crypto-volatility-index"]],
       ["@chainlink/cryptoapis-adapter", ["workspace:packages/sources/cryptoapis"]],
@@ -5821,6 +5826,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "SOFT",
         }]
       ]],
+      ["@chainlink/connexun-adapter", [
+        ["workspace:packages/sources/connexun", {
+          "packageLocation": "./packages/sources/connexun/",
+          "packageDependencies": [
+            ["@chainlink/connexun-adapter", "workspace:packages/sources/connexun"],
+            ["@chainlink/ea-bootstrap", "workspace:packages/core/bootstrap"],
+            ["@chainlink/ea-test-helpers", "workspace:packages/core/test-helpers"],
+            ["@chainlink/types", "workspace:packages/core/types/@chainlink"],
+            ["@types/jest", "npm:26.0.22"],
+            ["@types/node", "npm:14.14.41"],
+            ["tslib", "npm:2.2.0"],
+            ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
       ["@chainlink/contracts", [
         ["npm:0.0.10", {
           "packageLocation": "./.yarn/cache/@chainlink-contracts-npm-0.0.10-398b3f0a33-02266bc236.zip/node_modules/@chainlink/contracts/",
@@ -6133,9 +6154,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chainlink/blockchair-adapter", "workspace:packages/sources/blockchair"],
             ["@chainlink/blockcypher-adapter", "workspace:packages/sources/blockcypher"],
             ["@chainlink/blockstream-adapter", "workspace:packages/sources/blockstream"],
+            ["@chainlink/bookmakerratings-adapter", "workspace:packages/sources/bookmakerratings"],
             ["@chainlink/bravenewcoin-adapter", "workspace:packages/sources/bravenewcoin"],
             ["@chainlink/btc.com-adapter", "workspace:packages/sources/btc.com"],
             ["@chainlink/cfbenchmarks-adapter", "workspace:packages/sources/cfbenchmarks"],
+            ["@chainlink/ciphertrace-adapter", "workspace:packages/sources/ciphertrace"],
             ["@chainlink/coinapi-adapter", "workspace:packages/sources/coinapi"],
             ["@chainlink/coinbase-adapter", "workspace:packages/sources/coinbase"],
             ["@chainlink/coincodex-adapter", "workspace:packages/sources/coincodex"],
@@ -6144,6 +6167,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chainlink/coinmarketcap-adapter", "workspace:packages/sources/coinmarketcap"],
             ["@chainlink/coinpaprika-adapter", "workspace:packages/sources/coinpaprika"],
             ["@chainlink/coinranking-adapter", "workspace:packages/sources/coinranking"],
+            ["@chainlink/connexun-adapter", "workspace:packages/sources/connexun"],
             ["@chainlink/covid-tracker-adapter", "workspace:packages/sources/covid-tracker"],
             ["@chainlink/cryptoapis-adapter", "workspace:packages/sources/cryptoapis"],
             ["@chainlink/cryptocompare-adapter", "workspace:packages/sources/cryptocompare"],
@@ -6152,6 +6176,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chainlink/currencylayer-adapter", "workspace:packages/sources/currencylayer"],
             ["@chainlink/deribit-adapter", "workspace:packages/sources/deribit"],
             ["@chainlink/dns-query-adapter", "workspace:packages/sources/dns-query"],
+            ["@chainlink/dnsproof-adapter", "workspace:packages/sources/dnsproof"],
             ["@chainlink/dwolla-adapter", "workspace:packages/sources/dwolla"],
             ["@chainlink/dxfeed-adapter", "workspace:packages/sources/dxfeed"],
             ["@chainlink/dxfeed-secondary-adapter", "workspace:packages/sources/dxfeed-secondary"],
@@ -6165,6 +6190,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chainlink/fixer-adapter", "workspace:packages/sources/fixer"],
             ["@chainlink/fmpcloud-adapter", "workspace:packages/sources/fmpcloud"],
             ["@chainlink/genesis-volatility-adapter", "workspace:packages/sources/genesis-volatility"],
+            ["@chainlink/genesisvolatility-adapter", "workspace:packages/sources/genesisvolatility"],
             ["@chainlink/geodb-adapter", "workspace:packages/sources/geodb"],
             ["@chainlink/iex-cloud-adapter", "workspace:packages/sources/iex-cloud"],
             ["@chainlink/intrinio-adapter", "workspace:packages/sources/intrinio"],
@@ -6186,9 +6212,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chainlink/paypal-adapter", "workspace:packages/sources/paypal"],
             ["@chainlink/poa-gasprice-adapter", "workspace:packages/sources/poa-gasprice"],
             ["@chainlink/polygon-adapter", "workspace:packages/sources/polygon"],
+            ["@chainlink/prospectnow-adapter", "workspace:packages/sources/prospectnow"],
             ["@chainlink/reduce-adapter", "workspace:packages/sources/reduce"],
             ["@chainlink/renvm-address-set-adapter", "workspace:packages/sources/renvm-address-set"],
             ["@chainlink/satoshitango-adapter", "workspace:packages/sources/satoshitango"],
+            ["@chainlink/smartzip-adapter", "workspace:packages/sources/smartzip"],
             ["@chainlink/sochain-adapter", "workspace:packages/sources/sochain"],
             ["@chainlink/sportsdataio-adapter", "workspace:packages/sources/sportsdataio"],
             ["@chainlink/stasis-adapter", "workspace:packages/sources/stasis"],
@@ -6200,6 +6228,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chainlink/trueusd-adapter", "workspace:packages/sources/trueusd"],
             ["@chainlink/twelvedata-adapter", "workspace:packages/sources/twelvedata"],
             ["@chainlink/unibit-adapter", "workspace:packages/sources/unibit"],
+            ["@chainlink/watchsignals-adapter", "workspace:packages/sources/watchsignals"],
             ["@chainlink/wbtc-address-set-adapter", "workspace:packages/sources/wbtc-address-set"],
             ["@chainlink/xbto-adapter", "workspace:packages/sources/xbto"],
             ["@types/chai", "npm:4.2.16"],

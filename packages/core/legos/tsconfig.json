@@ -4,11 +4,20 @@
     "outDir": "dist",
     "rootDir": "src",
     "paths": {
-      "*": ["./types/*"]
+      "*": [
+        "./types/*"
+      ]
     }
   },
-  "include": ["src/**/*", "src/limits.json"],
-  "exclude": ["dist", "**/*.spec.ts", "**/*.test.ts"],
+  "include": [
+    "src/**/*",
+    "src/limits.json"
+  ],
+  "exclude": [
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ],
   "references": [
     {
       "path": "../../sources/1forge"
@@ -56,6 +65,9 @@
       "path": "../../sources/blockstream"
     },
     {
+      "path": "../../sources/bookmakerratings"
+    },
+    {
       "path": "../../sources/bravenewcoin"
     },
     {
@@ -63,6 +75,9 @@
     },
     {
       "path": "../../sources/cfbenchmarks"
+    },
+    {
+      "path": "../../sources/ciphertrace"
     },
     {
       "path": "../../sources/coinapi"
@@ -89,6 +104,9 @@
       "path": "../../sources/coinranking"
     },
     {
+      "path": "../../sources/connexun"
+    },
+    {
       "path": "../../sources/covid-tracker"
     },
     {
@@ -111,6 +129,9 @@
     },
     {
       "path": "../../sources/dns-query"
+    },
+    {
+      "path": "../../sources/dnsproof"
     },
     {
       "path": "../../sources/dwolla"
@@ -150,6 +171,9 @@
     },
     {
       "path": "../../sources/genesis-volatility"
+    },
+    {
+      "path": "../../sources/genesisvolatility"
     },
     {
       "path": "../../sources/geodb"
@@ -215,6 +239,9 @@
       "path": "../../sources/polygon"
     },
     {
+      "path": "../../sources/prospectnow"
+    },
+    {
       "path": "../../sources/reduce"
     },
     {
@@ -222,6 +249,9 @@
     },
     {
       "path": "../../sources/satoshitango"
+    },
+    {
+      "path": "../../sources/smartzip"
     },
     {
       "path": "../../sources/sochain"
@@ -255,6 +285,9 @@
     },
     {
       "path": "../../sources/unibit"
+    },
+    {
+      "path": "../../sources/watchsignals"
     },
     {
       "path": "../../sources/wbtc-address-set"

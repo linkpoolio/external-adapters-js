@@ -2922,7 +2922,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@chainlink/bookmakerratings-adapter@workspace:packages/sources/bookmakerratings":
+"@chainlink/bookmakerratings-adapter@*, @chainlink/bookmakerratings-adapter@workspace:packages/sources/bookmakerratings":
   version: 0.0.0-use.local
   resolution: "@chainlink/bookmakerratings-adapter@workspace:packages/sources/bookmakerratings"
   dependencies:
@@ -2980,7 +2980,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@chainlink/ciphertrace-adapter@workspace:packages/sources/ciphertrace":
+"@chainlink/ciphertrace-adapter@*, @chainlink/ciphertrace-adapter@workspace:packages/sources/ciphertrace":
   version: 0.0.0-use.local
   resolution: "@chainlink/ciphertrace-adapter@workspace:packages/sources/ciphertrace"
   dependencies:
@@ -3119,6 +3119,20 @@ __metadata:
     "@types/node": ^14.14.35
     ethers: ^5.0.32
     js-conflux-sdk: ^1.5.11
+    tslib: ^2.1.0
+    typescript: ^4.2.3
+  languageName: unknown
+  linkType: soft
+
+"@chainlink/connexun-adapter@*, @chainlink/connexun-adapter@workspace:packages/sources/connexun":
+  version: 0.0.0-use.local
+  resolution: "@chainlink/connexun-adapter@workspace:packages/sources/connexun"
+  dependencies:
+    "@chainlink/ea-bootstrap": "*"
+    "@chainlink/ea-test-helpers": "*"
+    "@chainlink/types": 0.0.1
+    "@types/jest": ^26.0.22
+    "@types/node": ^14.14.35
     tslib: ^2.1.0
     typescript: ^4.2.3
   languageName: unknown
@@ -3318,7 +3332,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@chainlink/dnsproof-adapter@workspace:packages/sources/dnsproof":
+"@chainlink/dnsproof-adapter@*, @chainlink/dnsproof-adapter@workspace:packages/sources/dnsproof":
   version: 0.0.0-use.local
   resolution: "@chainlink/dnsproof-adapter@workspace:packages/sources/dnsproof"
   dependencies:
@@ -3526,9 +3540,11 @@ __metadata:
     "@chainlink/blockchair-adapter": "*"
     "@chainlink/blockcypher-adapter": "*"
     "@chainlink/blockstream-adapter": "*"
+    "@chainlink/bookmakerratings-adapter": "*"
     "@chainlink/bravenewcoin-adapter": "*"
     "@chainlink/btc.com-adapter": "*"
     "@chainlink/cfbenchmarks-adapter": "*"
+    "@chainlink/ciphertrace-adapter": "*"
     "@chainlink/coinapi-adapter": "*"
     "@chainlink/coinbase-adapter": "*"
     "@chainlink/coincodex-adapter": "*"
@@ -3537,6 +3553,7 @@ __metadata:
     "@chainlink/coinmarketcap-adapter": "*"
     "@chainlink/coinpaprika-adapter": "*"
     "@chainlink/coinranking-adapter": "*"
+    "@chainlink/connexun-adapter": "*"
     "@chainlink/covid-tracker-adapter": "*"
     "@chainlink/cryptoapis-adapter": "*"
     "@chainlink/cryptocompare-adapter": "*"
@@ -3545,6 +3562,7 @@ __metadata:
     "@chainlink/currencylayer-adapter": "*"
     "@chainlink/deribit-adapter": "*"
     "@chainlink/dns-query-adapter": "*"
+    "@chainlink/dnsproof-adapter": "*"
     "@chainlink/dwolla-adapter": "*"
     "@chainlink/dxfeed-adapter": "*"
     "@chainlink/dxfeed-secondary-adapter": "*"
@@ -3558,6 +3576,7 @@ __metadata:
     "@chainlink/fixer-adapter": "*"
     "@chainlink/fmpcloud-adapter": "*"
     "@chainlink/genesis-volatility-adapter": "*"
+    "@chainlink/genesisvolatility-adapter": "*"
     "@chainlink/geodb-adapter": "*"
     "@chainlink/iex-cloud-adapter": "*"
     "@chainlink/intrinio-adapter": "*"
@@ -3579,9 +3598,11 @@ __metadata:
     "@chainlink/paypal-adapter": "*"
     "@chainlink/poa-gasprice-adapter": "*"
     "@chainlink/polygon-adapter": "*"
+    "@chainlink/prospectnow-adapter": "*"
     "@chainlink/reduce-adapter": "*"
     "@chainlink/renvm-address-set-adapter": "*"
     "@chainlink/satoshitango-adapter": "*"
+    "@chainlink/smartzip-adapter": "*"
     "@chainlink/sochain-adapter": "*"
     "@chainlink/sportsdataio-adapter": "*"
     "@chainlink/stasis-adapter": "*"
@@ -3593,6 +3614,7 @@ __metadata:
     "@chainlink/trueusd-adapter": "*"
     "@chainlink/twelvedata-adapter": "*"
     "@chainlink/unibit-adapter": "*"
+    "@chainlink/watchsignals-adapter": "*"
     "@chainlink/wbtc-address-set-adapter": "*"
     "@chainlink/xbto-adapter": "*"
     "@types/chai": ^4.2.15
@@ -3819,7 +3841,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@chainlink/genesisvolatility-adapter@workspace:packages/sources/genesisvolatility":
+"@chainlink/genesisvolatility-adapter@*, @chainlink/genesisvolatility-adapter@workspace:packages/sources/genesisvolatility":
   version: 0.0.0-use.local
   resolution: "@chainlink/genesisvolatility-adapter@workspace:packages/sources/genesisvolatility"
   dependencies:
@@ -4216,7 +4238,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@chainlink/prospectnow-adapter@workspace:packages/sources/prospectnow":
+"@chainlink/prospectnow-adapter@*, @chainlink/prospectnow-adapter@workspace:packages/sources/prospectnow":
   version: 0.0.0-use.local
   resolution: "@chainlink/prospectnow-adapter@workspace:packages/sources/prospectnow"
   dependencies:
@@ -4294,7 +4316,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@chainlink/smartzip-adapter@workspace:packages/sources/smartzip":
+"@chainlink/smartzip-adapter@*, @chainlink/smartzip-adapter@workspace:packages/sources/smartzip":
   version: 0.0.0-use.local
   resolution: "@chainlink/smartzip-adapter@workspace:packages/sources/smartzip"
   dependencies:
@@ -4528,7 +4550,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@chainlink/watchsignals-adapter@workspace:packages/sources/watchsignals":
+"@chainlink/watchsignals-adapter@*, @chainlink/watchsignals-adapter@workspace:packages/sources/watchsignals":
   version: 0.0.0-use.local
   resolution: "@chainlink/watchsignals-adapter@workspace:packages/sources/watchsignals"
   dependencies:
