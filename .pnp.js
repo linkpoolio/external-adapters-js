@@ -143,8 +143,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/sources/anyblock-uniswap-vwap"
       },
       {
-        "name": "@chainlink/azuro-adapter-adapter",
-        "reference": "workspace:packages/sources/azuro-adapter"
+        "name": "@chainlink/azuro-adapter",
+        "reference": "workspace:packages/sources/azuro"
       },
       {
         "name": "@chainlink/binance-adapter",
@@ -516,7 +516,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@chainlink/anyblock-uniswap-vwap-adapter", ["workspace:packages/sources/anyblock-uniswap-vwap"]],
       ["@chainlink/apy-finance-adapter", ["workspace:packages/composites/apy-finance"]],
       ["@chainlink/augur-adapter", ["workspace:packages/composites/augur"]],
-      ["@chainlink/azuro-adapter-adapter", ["workspace:packages/sources/azuro-adapter"]],
+      ["@chainlink/azuro-adapter", ["workspace:packages/sources/azuro"]],
       ["@chainlink/binance-adapter", ["workspace:packages/sources/binance"]],
       ["@chainlink/binance-dex-adapter", ["workspace:packages/sources/binance-dex"]],
       ["@chainlink/bitcoin-json-rpc-adapter", ["workspace:packages/composites/bitcoin-json-rpc"]],
@@ -5442,11 +5442,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "SOFT",
         }]
       ]],
-      ["@chainlink/azuro-adapter-adapter", [
-        ["workspace:packages/sources/azuro-adapter", {
-          "packageLocation": "./packages/sources/azuro-adapter/",
+      ["@chainlink/azuro-adapter", [
+        ["workspace:packages/sources/azuro", {
+          "packageLocation": "./packages/sources/azuro/",
           "packageDependencies": [
-            ["@chainlink/azuro-adapter-adapter", "workspace:packages/sources/azuro-adapter"],
+            ["@chainlink/azuro-adapter", "workspace:packages/sources/azuro"],
             ["@chainlink/ea-bootstrap", "workspace:packages/core/bootstrap"],
             ["@chainlink/ea-test-helpers", "workspace:packages/core/test-helpers"],
             ["@chainlink/types", "workspace:packages/core/types/@chainlink"],

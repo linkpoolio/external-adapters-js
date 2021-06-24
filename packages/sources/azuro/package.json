@@ -1,5 +1,5 @@
 {
-  "name": "@chainlink/azuro-adapter-adapter",
+  "name": "@chainlink/azuro-adapter",
   "version": "0.0.1",
   "description": "Chainlink azuro-adapter adapter.",
   "keywords": [

@@ -2786,9 +2786,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@chainlink/azuro-adapter-adapter@workspace:packages/sources/azuro-adapter":
+"@chainlink/azuro-adapter@workspace:packages/sources/azuro":
   version: 0.0.0-use.local
-  resolution: "@chainlink/azuro-adapter-adapter@workspace:packages/sources/azuro-adapter"
+  resolution: "@chainlink/azuro-adapter@workspace:packages/sources/azuro"
   dependencies:
     "@chainlink/ea-bootstrap": "*"
     "@chainlink/ea-test-helpers": "*"

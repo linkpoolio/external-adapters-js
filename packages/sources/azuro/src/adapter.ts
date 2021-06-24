@@ -1,7 +1,6 @@
 import { Requester, AdapterError } from '@chainlink/ea-bootstrap'
-import { Config, ExecuteWithConfig, ExecuteFactory } from '@chainlink/types'
-import { makeConfig } from './config'
-
+import { AdapterRequest, AdapterResponse, ExecuteFactory } from '@chainlink/types'
+import { Config, makeConfig } from './config'
 
 export interface AzuroEvent {
   id: number
@@ -11,8 +10,7 @@ export interface AzuroEvent {
   ipfsHash: string
 }
 
-
-export const execute: ExecuteWithConfig<Config> = async (request, config) => {
+export const execute = async (request: AdapterRequest, config: Config): Promise<AdapterResponse> => {
   Requester.logConfig(config)
 
   const urlMap: Record<string, string> = {
@@ -26,9 +24,18 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   }
 
   const jobRunID = request.id
-  const endpoint = request.data.endpoint.toLowerCase()
+  const endpoint = String(request.data.endpoint).toLowerCase()
 
-  if (!urlMap.hasOwnProperty(endpoint)) {
+
+  if (!config.env) {
+    throw new AdapterError({
+      jobRunID,
+      message: `No env configured`,
+      statusCode: 400,
+    })
+  }
+
+  if (!Object.prototype.hasOwnProperty.call(urlMap, endpoint)) {
     throw new AdapterError({
       jobRunID,
       message: `Endpoint ${endpoint} not supported.`,
@@ -53,12 +60,17 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const { data } = response
 
   if (data.length === 0) {
-    return Requester.errored(jobRunID, "API returned empty result")
+    throw new AdapterError({
+      jobRunID,
+      message: "API returned empty result",
+      statusCode: 500,
+    })
   }
   response.data.result = Object.values(response.data)
 
   return Requester.success(jobRunID, response, config.verbose)
 }
+
 
 export const makeExecute: ExecuteFactory<Config> = (config) => {
   return async (request) => execute(request, config || makeConfig())

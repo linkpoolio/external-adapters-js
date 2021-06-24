@@ -1,5 +1,5 @@
 import { Requester } from '@chainlink/ea-bootstrap'
-import { Config } from '@chainlink/types'
+import { Config as ChainlinkConfig } from '@chainlink/types'
 
 export const NAME = 'AZURO'
 
@@ -8,8 +8,12 @@ const pickBaseUrl: Record<string, string> = {
   prod: 'https://azuro.org'
 }
 
+export type Config = ChainlinkConfig & {
+  env?: string
+}
+
 export const makeConfig = (prefix?: string): Config => {
-  const config = Requester.getDefaultConfig(prefix)
+  const config: Config = Requester.getDefaultConfig(prefix)
   config.env = String(process.env.NODE_ENV).toLowerCase() || 'prod'
   config.api.baseURL = pickBaseUrl[config.env]
   return config
