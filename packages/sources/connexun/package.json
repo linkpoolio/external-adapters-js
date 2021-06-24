@@ -1,7 +1,7 @@
 {
   "name": "@chainlink/connexun-adapter",
   "version": "0.0.1",
-  "description": "Chainlink connexun adapter.",
+  "description": "Chainlink Connexun adapter.",
   "keywords": [
     "Chainlink",
     "LINK",

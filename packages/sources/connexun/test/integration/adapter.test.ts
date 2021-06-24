@@ -8,56 +8,151 @@ describe('execute', () => {
   const execute = makeExecute()
 
   describe('successful calls @integration', () => {
-    const requests = [
-      {
-        name: 'id not supplied',
-        testData: { data: { base: 'ETH', quote: 'USD' } },
-      },
-      {
-        name: 'base/quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'USD' } },
-      },
-      {
-        name: 'from/to',
-        testData: { id: jobID, data: { from: 'ETH', to: 'USD' } },
-      },
-      {
-        name: 'coin/market',
-        testData: { id: jobID, data: { coin: 'ETH', market: 'USD' } },
-      },
-    ]
 
-    requests.forEach((req) => {
-      it(`${req.name}`, async () => {
-        const data = await execute(req.testData as AdapterRequest)
-        assertSuccess({ expected: 200, actual: data.statusCode }, data, jobID)
-        expect(data.result).toBeGreaterThan(0)
-        expect(data.data.result).toBeGreaterThan(0)
-      })
+    it('crypto-sentiment: without job id', async () => {
+      const req = {
+        data: {
+          endpoint: 'crypto-sentiment',
+          token: 'ETH',
+          period: 1
+        }
+      }
+      const res = await execute(req as AdapterRequest)
+      assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
+
+      expect(res.result).toBeGreaterThan(0)
+      expect(res.data.result).toBeGreaterThan(0)
+    })
+
+    it('crypto-sentiment: with job id', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'crypto-sentiment',
+          token: 'ETH',
+          period: 1
+        }
+      }
+      const res = await execute(req as AdapterRequest)
+      assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
+
+      expect(res.result).toBeGreaterThan(0)
+      expect(res.data.result).toBeGreaterThan(0)
+    })
+
+    it('crypto-sentiment: with no token', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'crypto-sentiment',
+          period: 1
+        }
+      }
+      const res = await execute(req as AdapterRequest)
+      assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
+
+      expect(res.result).toBeGreaterThan(0)
+      expect(res.data.result).toBeGreaterThan(0)
+    })
+
+    it('crypto-sentiment: with no period', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'crypto-sentiment',
+          token: 'ETH',
+        }
+      }
+      const res = await execute(req as AdapterRequest)
+      assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
+
+      expect(res.result).toBeGreaterThan(0)
+      expect(res.data.result).toBeGreaterThan(0)
+    })
+
+    it('crypto-sentiment: with lowercase token', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'crypto-sentiment',
+          token: 'eth',
+          period: 1
+        }
+      }
+      const res = await execute(req as AdapterRequest)
+      assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
+
+      expect(res.result).toBeGreaterThan(0)
+      expect(res.data.result).toBeGreaterThan(0)
+    })
+
+    it('crypto-sentiment: with mixed case token', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'crypto-sentiment',
+          token: 'eTh',
+          period: 1
+        }
+      }
+      const res = await execute(req as AdapterRequest)
+      assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
+
+      expect(res.result).toBeGreaterThan(0)
+      expect(res.data.result).toBeGreaterThan(0)
     })
   })
 
   describe('error calls @integration', () => {
-    const requests = [
-      {
-        name: 'unknown base',
-        testData: { id: jobID, data: { base: 'not_real', quote: 'USD' } },
-      },
-      {
-        name: 'unknown quote',
-        testData: { id: jobID, data: { base: 'ETH', quote: 'not_real' } },
-      },
-    ]
-
-    requests.forEach((req) => {
-      it(`${req.name}`, async () => {
-        try {
-          await execute(req.testData as AdapterRequest)
-        } catch (error) {
-          const errorResp = Requester.errored(jobID, error)
-          assertError({ expected: 500, actual: errorResp.statusCode }, errorResp, jobID)
+    it('crypto-sentiment: unknown endpoint', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'xyz-dne',
+          token: 'ETH',
+          period: 1
         }
-      })
+      }
+      try {
+        await execute(req as AdapterRequest)
+      } catch (error) {
+        const errorResp = Requester.errored(jobID, error)
+        assertError({ expected: 400, actual: errorResp.statusCode }, errorResp, jobID)
+      }
+    })
+
+    it('crypto-sentiment: unknown token', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'crypto-sentiment',
+          token: 'Z$1',
+          period: 1
+        }
+      }
+      try {
+        await execute(req as AdapterRequest)
+      } catch (error) {
+        const errorResp = Requester.errored(jobID, error)
+        assertError({ expected: 400, actual: errorResp.statusCode }, errorResp, jobID)
+      }
+    })
+
+    it('crypto-sentiment: unknown period', async () => {
+      const req = {
+        id: jobID,
+        data: {
+          endpoint: 'crypto-sentiment',
+          token: 'ETH',
+          period: 9001
+        }
+      }
+      try {
+        await execute(req as AdapterRequest)
+      } catch (error) {
+        const errorResp = Requester.errored(jobID, error)
+        assertError({ expected: 400, actual: errorResp.statusCode }, errorResp, jobID)
+      }
     })
   })
 })
