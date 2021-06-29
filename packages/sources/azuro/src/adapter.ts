@@ -52,9 +52,7 @@ export const execute = async (request: AdapterRequest, config: Config): Promise<
     method
   }
 
-  if (config.env === 'test') {
-    options.headers['Authorization'] = 'OAuth dev-token'
-  }
+  options.headers['Authorization'] = `OAuth ${config.apiKey}`
 
   const response = await Requester.request(options)
   const { data } = response

@@ -6,7 +6,7 @@ Sports predictive markets
 
 | Required? |  Name   |                                                        Description                                                         | Options | Defaults to |
 | :-------: | :-----: | :------------------------------------------------------------------------------------------------------------------------: | :-----: | :---------: |
-|           | API_KEY | An API key that can be obtained from the data provider's dashboard (add a ✅ in `Required?` if this parameter is required) |         |             |
+|   ✅         | API_KEY | Oauth bearer token  |         |             |
 
 ---
 
@@ -14,20 +14,14 @@ Sports predictive markets
 
 | Required? |   Name   |     Description     |           Options            | Defaults to |
 | :-------: | :------: | :-----------------: | :--------------------------: | :---------: |
-|           | endpoint | The endpoint to use | [example](#Azuro-adapter-Endpoint) |   example   |
+|      ✅      | endpoint | The endpoint to use | `open`, `settle` |   -   |
 
 ---
 
-## Azuro-adapter Endpoint
+## Open and Settle Endpoint
 
-An example endpoint description
-
-### Input Params
-
-| Required? |            Name            |               Description                |       Options       | Defaults to |
-| :-------: | :------------------------: | :--------------------------------------: | :-----------------: | :---------: |
-|    ✅     | `base`, `from`, or `coin`  |   The symbol of the currency to query    | `BTC`, `ETH`, `USD` |             |
-|    ✅     | `quote`, `to`, or `market` | The symbol of the currency to convert to | `BTC`, `ETH`, `USD` |             |
+Open endpoint returns the events that need to be made on chian and settle returns the events that need to be closed
+on chain.
 
 ### Sample Input
 
@@ -35,8 +29,7 @@ An example endpoint description
 {
   "id": "1",
   "data": {
-    "base": "ETH",
-    "quote": "USD"
+    "endpoint": "open"
   }
 }
 ```
@@ -46,10 +39,8 @@ An example endpoint description
 ```json
 {
   "jobRunID": "278c97ffadb54a5bbb93cfec5f7b5503",
-  "data": {
-    "price": 77777.77,
-    "result": 77777.77
-  },
+  "data": [12383020, 800, 1200, 1625006815, "mtwirsqawjuoloq2gvtyug2tc3jbf5htm2zeo4rsknfiv3fdp46a"],
+  "result": [12383020, 800, 1200, 1625006815, "mtwirsqawjuoloq2gvtyug2tc3jbf5htm2zeo4rsknfiv3fdp46a"],
   "statusCode": 200
 }
 ```
