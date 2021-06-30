@@ -443,6 +443,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/sources/stasis"
       },
       {
+        "name": "@chainlink/stats-adapter",
+        "reference": "workspace:packages/sources/stats-perform"
+      },
+      {
         "name": "@chainlink/taapi-adapter",
         "reference": "workspace:packages/sources/taapi"
       },
@@ -616,6 +620,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@chainlink/sochain-adapter", ["workspace:packages/sources/sochain"]],
       ["@chainlink/sportsdataio-adapter", ["workspace:packages/sources/sportsdataio"]],
       ["@chainlink/stasis-adapter", ["workspace:packages/sources/stasis"]],
+      ["@chainlink/stats-adapter", ["workspace:packages/sources/stats-perform"]],
       ["@chainlink/synth-index-adapter", ["workspace:packages/composites/synth-index"]],
       ["@chainlink/taapi-adapter", ["workspace:packages/sources/taapi"]],
       ["@chainlink/therundown-adapter", ["workspace:packages/sources/therundown"]],
@@ -6168,6 +6173,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chainlink/amberdata-gasprice-adapter", "workspace:packages/sources/amberdata-gasprice"],
             ["@chainlink/anyblock-gasprice-adapter", "workspace:packages/sources/anyblock-gasprice"],
             ["@chainlink/anyblock-uniswap-vwap-adapter", "workspace:packages/sources/anyblock-uniswap-vwap"],
+            ["@chainlink/azuro-adapter", "workspace:packages/sources/azuro"],
             ["@chainlink/binance-adapter", "workspace:packages/sources/binance"],
             ["@chainlink/binance-dex-adapter", "workspace:packages/sources/binance-dex"],
             ["@chainlink/bitex-adapter", "workspace:packages/sources/bitex"],
@@ -6242,6 +6248,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chainlink/sochain-adapter", "workspace:packages/sources/sochain"],
             ["@chainlink/sportsdataio-adapter", "workspace:packages/sources/sportsdataio"],
             ["@chainlink/stasis-adapter", "workspace:packages/sources/stasis"],
+            ["@chainlink/stats-adapter", "workspace:packages/sources/stats-perform"],
             ["@chainlink/taapi-adapter", "workspace:packages/sources/taapi"],
             ["@chainlink/therundown-adapter", "workspace:packages/sources/therundown"],
             ["@chainlink/tiingo-adapter", "workspace:packages/sources/tiingo"],
@@ -7222,6 +7229,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/sources/stasis/",
           "packageDependencies": [
             ["@chainlink/stasis-adapter", "workspace:packages/sources/stasis"],
+            ["@chainlink/ea-bootstrap", "workspace:packages/core/bootstrap"],
+            ["@chainlink/ea-test-helpers", "workspace:packages/core/test-helpers"],
+            ["@chainlink/types", "workspace:packages/core/types/@chainlink"],
+            ["@types/jest", "npm:26.0.22"],
+            ["@types/node", "npm:14.14.41"],
+            ["tslib", "npm:2.2.0"],
+            ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@chainlink/stats-adapter", [
+        ["workspace:packages/sources/stats-perform", {
+          "packageLocation": "./packages/sources/stats-perform/",
+          "packageDependencies": [
+            ["@chainlink/stats-adapter", "workspace:packages/sources/stats-perform"],
             ["@chainlink/ea-bootstrap", "workspace:packages/core/bootstrap"],
             ["@chainlink/ea-test-helpers", "workspace:packages/core/test-helpers"],
             ["@chainlink/types", "workspace:packages/core/types/@chainlink"],
