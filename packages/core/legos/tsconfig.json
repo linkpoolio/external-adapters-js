@@ -41,6 +41,9 @@
       "path": "../../sources/anyblock-uniswap-vwap"
     },
     {
+      "path": "../../sources/azuro"
+    },
+    {
       "path": "../../sources/binance"
     },
     {
@@ -261,6 +264,9 @@
     },
     {
       "path": "../../sources/stasis"
+    },
+    {
+      "path": "../../sources/stats"
     },
     {
       "path": "../../sources/taapi"
