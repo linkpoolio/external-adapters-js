@@ -80,7 +80,7 @@ import * as smartzip from '@chainlink/smartzip-adapter'
 import * as sochain from '@chainlink/sochain-adapter'
 import * as sportsdataio from '@chainlink/sportsdataio-adapter'
 import * as stasis from '@chainlink/stasis-adapter'
-import * as stats from '@chainlink/stats-adapter'
+import * as stats_perform from '@chainlink/stats-perform-adapter'
 import * as taapi from '@chainlink/taapi-adapter'
 import * as therundown from '@chainlink/therundown-adapter'
 import * as tiingo from '@chainlink/tiingo-adapter'
@@ -176,7 +176,7 @@ export default {
   sochain,
   sportsdataio,
   stasis,
-  stats,
+  stats_perform,
   taapi,
   therundown,
   tiingo,

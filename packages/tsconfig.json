@@ -312,7 +312,7 @@
       "path": "./sources/stasis"
     },
     {
-      "path": "./sources/stats"
+      "path": "./sources/stats-perform"
     },
     {
       "path": "./sources/taapi"

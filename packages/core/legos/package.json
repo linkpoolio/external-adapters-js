@@ -112,7 +112,7 @@
     "@chainlink/sochain-adapter": "*",
     "@chainlink/sportsdataio-adapter": "*",
     "@chainlink/stasis-adapter": "*",
-    "@chainlink/stats-adapter": "*",
+    "@chainlink/stats-perform-adapter": "*",
     "@chainlink/taapi-adapter": "*",
     "@chainlink/therundown-adapter": "*",
     "@chainlink/tiingo-adapter": "*",
