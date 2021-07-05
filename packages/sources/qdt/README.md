@@ -6,9 +6,9 @@ External adapter for integrating with Quantum Data Technologie's APIs.
 
 ### Environment Variables
 
-| Required? |  Name   |                                                        Description                                                         | Options | Defaults to |
-| :-------: | :-----: | :------------------------------------------------------------------------------------------------------------------------: | :-----: | :---------: |
-|    ✅        | API_KEY | An API key that can be obtained from the data provider's dashboard |         |             |
+| Required? |  Name   |               Description                | Options | Defaults to |
+| :-------: | :-----: | :--------------------------------------: | :-----: | :---------: |
+|    ✅     | API_KEY | Key used to access authenticate with API |         |             |
 
 ---
 
@@ -16,7 +16,7 @@ External adapter for integrating with Quantum Data Technologie's APIs.
 
 | Required? |   Name   |     Description     |           Options            | Defaults to |
 | :-------: | :------: | :-----------------: | :--------------------------: | :---------: |
-|     ✅        | endpoint | The endpoint to use | [price](#QDT-Price-Endpoint) |   example   |
+|    ✅     | endpoint | The endpoint to use | [price](#QDT-Price-Endpoint) |   example   |
 
 ---
 
@@ -26,10 +26,10 @@ Return's price prediction data for a given symbol
 
 ### Input Params
 
-| Required? |            Name            |               Description                |       Options       | Defaults to |
-| :-------: | :------------------------: | :--------------------------------------: | :-----------------: | :---------: |
-|         | `symbol`  |   The symbol of the currency to query    | `BTC` | `BTC`            |
-|         | `days` | Number of days from today to get the closing day price | number in range of `0` to `12` |           `0`  |
+| Required? |   Name   |                      Description                       |            Options             | Defaults to |
+| :-------: | :------: | :----------------------------------------------------: | :----------------------------: | :---------: |
+|           | `symbol` |          The symbol of the currency to query           |             `BTC`              |    `BTC`    |
+|           |  `days`  | Number of days from today to get the closing day price | number in range of `0` to `12` |     `0`     |
 
 ### Sample Input
 
