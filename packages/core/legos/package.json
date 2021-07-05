@@ -105,6 +105,7 @@
     "@chainlink/poa-gasprice-adapter": "*",
     "@chainlink/polygon-adapter": "*",
     "@chainlink/prospectnow-adapter": "*",
+    "@chainlink/qdt-adapter": "*",
     "@chainlink/reduce-adapter": "*",
     "@chainlink/renvm-address-set-adapter": "*",
     "@chainlink/satoshitango-adapter": "*",
