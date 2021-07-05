@@ -73,6 +73,7 @@ import * as paypal from '@chainlink/paypal-adapter'
 import * as poa_adapter from '@chainlink/poa-gasprice-adapter'
 import * as polygon from '@chainlink/polygon-adapter'
 import * as prospectnow from '@chainlink/prospectnow-adapter'
+import * as qdt from '@chainlink/qdt-adapter'
 import * as reduce from '@chainlink/reduce-adapter'
 import * as renvm_adapter_address from '@chainlink/renvm-address-set-adapter'
 import * as satoshitango from '@chainlink/satoshitango-adapter'
@@ -169,6 +170,7 @@ export default {
   poa_adapter,
   polygon,
   prospectnow,
+  qdt,
   reduce,
   renvm_adapter_address,
   satoshitango,

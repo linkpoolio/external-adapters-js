@@ -245,6 +245,9 @@
       "path": "../../sources/prospectnow"
     },
     {
+      "path": "../../sources/qdt"
+    },
+    {
       "path": "../../sources/reduce"
     },
     {
@@ -266,7 +269,7 @@
       "path": "../../sources/stasis"
     },
     {
-      "path": "../../sources/stats"
+      "path": "../../sources/stats-perform"
     },
     {
       "path": "../../sources/taapi"
