@@ -1,6 +1,7 @@
 import { Requester, AdapterError } from '@chainlink/ea-bootstrap'
 import { AdapterRequest, AdapterResponse, ExecuteFactory } from '@chainlink/types'
 import { Config, makeConfig } from './config'
+import { ethers } from 'ethers'
 
 export interface AzuroEvent {
   id: number
