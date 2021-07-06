@@ -4,17 +4,21 @@ Sports predictive markets
 
 ### Environment Variables
 
-| Required? |  Name   |                                                        Description                                                         | Options | Defaults to |
-| :-------: | :-----: | :------------------------------------------------------------------------------------------------------------------------: | :-----: | :---------: |
-|   ✅         | API_KEY | Oauth bearer token  |         |             |
+| Required? |  Name   |    Description     | Options | Defaults to |
+| :-------: | :-----: | :----------------: | :-----: | :---------: |
+|     ✅     | API_KEY | Oauth bearer token |         |             |
+|     ✅     | RPC_URL | RPC endpoint to use |         |             |
+|     ✅     | PRIVATE_KEY | Private key of signer for transactions |         |             |
 
 ---
 
 ### Input Parameters
 
-| Required? |   Name   |     Description     |           Options            | Defaults to |
-| :-------: | :------: | :-----------------: | :--------------------------: | :---------: |
-|      ✅      | endpoint | The endpoint to use | `open`, `settle` |   -   |
+| Required? |      Name       |                    Description                     |     Options      | Defaults to |
+| :-------: | :-------------: | :------------------------------------------------: | :--------------: | :---------: |
+|     ✅     |    endpoint     |                The endpoint to use                 | `open`, `settle` |      -      |
+|     ✅     | contractAddress |         The address to send transaction to         | A valid address  |      -      |
+|           |    packed     | Flag for switching between packed and unpacked api | `true`, `false`  |   `false`   |
 
 ---
 
@@ -29,7 +33,8 @@ on chain.
 {
   "id": "1",
   "data": {
-    "endpoint": "open"
+    "endpoint": "open",
+    "contractAddress": "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF"
   }
 }
 ```
