@@ -32,31 +32,49 @@ export const abi = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_id",
+        "name": "oracleConditionID",
         "type": "uint256"
       },
       {
-        "internalType": "int256",
-        "name": "_home",
-        "type": "int256"
-      },
-      {
-        "internalType": "int256",
-        "name": "_away",
-        "type": "int256"
+        "internalType": "uint256",
+        "name": "rate1_",
+        "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_timestamp",
+        "name": "rate2_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
         "type": "uint256"
       },
       {
         "internalType": "bytes32",
-        "name": "_ipfsHash",
+        "name": "ipfsHash",
         "type": "bytes32"
       }
     ],
     "name": "createCondition",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "conditionID_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "outcomeWin_",
+        "type": "uint256"
+      }
+    ],
+    "name": "resolveCondition",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
