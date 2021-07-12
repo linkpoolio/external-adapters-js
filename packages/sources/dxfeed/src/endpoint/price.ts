@@ -36,7 +36,6 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   }
 
   const response = await Requester.request(options, customError)
-
   const quotePath = ['Quote', symbol, 'bidPrice']
   const tradePath = ['Trade', symbol, 'price']
   response.data.result = Requester.validateResultNumber(

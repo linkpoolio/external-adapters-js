@@ -18,5 +18,8 @@ export const makeConfig = (prefix?: string): Config => {
     config.api.auth = { username, password }
   }
 
+  const radarSaasEndpoint = util.getEnv('RADAR_SAAS_API_ENDPOINT', prefix) || ''
+  config.api.radarSaasEndpoint = radarSaasEndpoint
+
   return config
 }
