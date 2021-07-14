@@ -2,19 +2,20 @@
 
 ### Environment Variables
 
-| Required? |     Name     |         Description          | Options |                Defaults to                 |
-| :-------: | :----------: | :--------------------------: | :-----: | :----------------------------------------: |
-|    ✅     | API_USERNAME |                              |         |                                            |
-|    ✅     | API_PASSWORD |                              |         |                                            |
-|           | API_ENDPOINT | The endpoint for your dxFeed |         | `https://tools.dxfeed.com/webservice/rest` |
+| Required? |          Name           |               Description               | Options |                Defaults to                 |
+| :-------: | :---------------------: | :-------------------------------------: | :-----: | :----------------------------------------: |
+|    ✅     |      API_USERNAME       |                                         |         |                                            |
+|    ✅     |      API_PASSWORD       |                                         |         |                                            |
+|           |      API_ENDPOINT       |      The endpoint for your dxFeed       |         | `https://tools.dxfeed.com/webservice/rest` |
+|    ✅     | RADAR_SAAS_API_ENDPOINT | The endpoint for your dxFeed Radar SaaS |         |                                            |
 
 ---
 
 ### Input Parameters
 
-| Required? |   Name   |     Description     |         Options          | Defaults to |
-| :-------: | :------: | :-----------------: | :----------------------: | :---------: |
-|           | endpoint | The endpoint to use | [price](#Price-Endpoint) |   `price`   |
+| Required? |   Name   |     Description     |                       Options                        | Defaults to |
+| :-------: | :------: | :-----------------: | :--------------------------------------------------: | :---------: |
+|           | endpoint | The endpoint to use | [price](#Price-Endpoint), [atm-iv](#ATM-IV-Endpoint) |   `price`   |
 
 ---
 
@@ -73,6 +74,49 @@ TSLAX ➡️ 'TSLA.US:TEI'
     "result": 6194.63
   },
   "result": 6194.63,
+  "statusCode": 200
+}
+```
+
+## ATM IV Endpoint
+
+At-the-money implied volatility
+
+### Input Params
+
+| Required? |   Name    |             Description             |    Options    | Defaults to |
+| :-------: | :-------: | :---------------------------------: | :-----------: | :---------: |
+|    ✅     | `symbol`  | The symbol of the currency to query | `BTC`, `ETH`, |             |
+|    ✅     | `daysOut` |         Days until maturity         |               |             |
+
+### Sample Input
+
+```json
+{
+  "id": "1",
+  "data": {
+    "symbol": "BTC",
+    "daysOut": 10
+  }
+}
+```
+
+### Sample Output
+
+```json
+{
+  "jobRunID": "1",
+  "data": {
+    "outputNames": ["atmIv(daysToExp=10)"],
+    "entries": [
+      {
+        "symbol": "BTCUSD:CXXDRB",
+        "outputs": [0.7259234133485732]
+      }
+    ],
+    "result": 0.7259234133485732
+  },
+  "result": 0.7259234133485732,
   "statusCode": 200
 }
 ```

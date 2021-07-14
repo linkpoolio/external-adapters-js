@@ -1,7 +1,7 @@
 import { Requester, Validator } from '@chainlink/ea-bootstrap'
 import { ExecuteWithConfig, ExecuteFactory, Config } from '@chainlink/types'
 import { makeConfig, DEFAULT_ENDPOINT } from './config'
-import { price } from './endpoint'
+import { price, atmIv } from './endpoint'
 
 const inputParams = {
   endpoint: false,
@@ -16,6 +16,9 @@ export const execute: ExecuteWithConfig<Config> = async (request, config) => {
   const endpoint = validator.validated.data.endpoint || DEFAULT_ENDPOINT
 
   switch (endpoint) {
+    case atmIv.NAME: {
+      return await atmIv.execute(request, config)
+    }
     default: {
       return await price.execute(request, config)
     }
