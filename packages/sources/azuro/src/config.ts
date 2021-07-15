@@ -5,8 +5,8 @@ import { ethers } from 'ethers'
 export const NAME = 'AZURO'
 
 const pickBaseUrl: Record<string, string> = {
-  test: 'http://artyrian.site',
-  prod: 'https://azuro.org'
+  test: 'https://artyrian.site',
+  prod: 'https://azuro.org',
 }
 
 export type Config = ChainlinkConfig & {

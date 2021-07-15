@@ -4,11 +4,11 @@ Sports predictive markets
 
 ### Environment Variables
 
-| Required? |  Name   |    Description     | Options | Defaults to |
-| :-------: | :-----: | :----------------: | :-----: | :---------: |
-|     ✅     | API_KEY | Oauth bearer token |         |             |
-|     ✅     | RPC_URL | RPC endpoint to use |         |             |
-|     ✅     | PRIVATE_KEY | Private key of signer for transactions |         |             |
+| Required? |    Name     |              Description               | Options | Defaults to |
+| :-------: | :---------: | :------------------------------------: | :-----: | :---------: |
+|    ✅     |   API_KEY   |           Oauth bearer token           |         |             |
+|    ✅     |   RPC_URL   |          RPC endpoint to use           |         |             |
+|    ✅     | PRIVATE_KEY | Private key of signer for transactions |         |             |
 
 ---
 
@@ -16,16 +16,15 @@ Sports predictive markets
 
 | Required? |      Name       |                    Description                     |     Options      | Defaults to |
 | :-------: | :-------------: | :------------------------------------------------: | :--------------: | :---------: |
-|     ✅     |    endpoint     |                The endpoint to use                 | `open`, `settle` |      -      |
-|     ✅     | contractAddress |         The address to send transaction to         | A valid address  |      -      |
-|           |    packed     | Flag for switching between packed and unpacked api | `true`, `false`  |   `false`   |
+|    ✅     |    endpoint     |                The endpoint to use                 | `open`, `settle` |      -      |
+|    ✅     | contractAddress |         The address to send transaction to         | A valid address  |      -      |
+|           |     packed      | Flag for switching between packed and unpacked api | `true`, `false`  |   `false`   |
 
 ---
 
 ## Open and Settle Endpoint
 
-Open endpoint returns the events that need to be made on chian and settle returns the events that need to be closed
-on chain.
+Returns the event transactions that were successfully executed on chain.
 
 ### Sample Input
 
@@ -43,9 +42,21 @@ on chain.
 
 ```json
 {
-  "jobRunID": "278c97ffadb54a5bbb93cfec5f7b5503",
-  "data": [12383020, 800, 1200, 1625006815, "mtwirsqawjuoloq2gvtyug2tc3jbf5htm2zeo4rsknfiv3fdp46a"],
-  "result": [12383020, 800, 1200, 1625006815, "mtwirsqawjuoloq2gvtyug2tc3jbf5htm2zeo4rsknfiv3fdp46a"],
+  "jobRunID": "1",
+  "data": {
+    "result": [
+      {
+        "txHash": "0xa8016d7a3b290678efcf0dd32ee413f02e4a3b5664957002641dc5d718adadff",
+        "id": 172636283
+      }
+    ]
+  },
+  "result": [
+    {
+      "txHash": "0xa8016d7a3b290678efcf0dd32ee413f02e4a3b5664957002641dc5d718adadff",
+      "id": 172636283
+    }
+  ],
   "statusCode": 200
 }
 ```

@@ -2,6 +2,7 @@ import { Requester, AdapterError, Logger, Validator } from '@chainlink/ea-bootst
 import { AdapterRequest, AdapterResponse, ExecuteFactory } from '@chainlink/types'
 import { Config, makeConfig } from './config'
 import { ethers } from 'ethers'
+import https from 'https'
 import { abi, packedAbi } from './abi'
 import { formatIpfsHash } from './util'
 
@@ -24,13 +25,20 @@ export interface AzuroResponse {
   data: AzuroEvent[]
 }
 
+export interface TxConfig {
+  nonce: number
+}
+
 const customParams = {
   endpoint: true,
   contractAddress: true,
-  packed: false
+  packed: false,
 }
 
-export const execute = async (request: AdapterRequest, config: Config): Promise<AdapterResponse> => {
+export const execute = async (
+  request: AdapterRequest,
+  config: Config,
+): Promise<AdapterResponse> => {
   Requester.logConfig(config)
   // --- Validation ---
   const validator = new Validator(request, customParams)
@@ -40,47 +48,55 @@ export const execute = async (request: AdapterRequest, config: Config): Promise<
     throw new Error(`No env configured`)
   }
 
+  if (!config.wallet) {
+    throw new Error(`No wallet configured`)
+  }
+
   // --- Initialization ---
   const jobRunID = validator.validated.id
   const endpoint = validator.validated.data.endpoint
   const contractAddress = validator.validated.data.contractAddress
   const packed = validator.validated.data.unpacked || false
 
+  const envConfigMap: Record<string, any> = {
+    test: {
+      method: 'post',
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false,
+      }),
+    },
+    prod: { method: 'get' },
+  }
+
   const urlMap: Record<string, string> = {
     open: '/rest/list/new',
-    settle: '/rest/list/resolved'
-  }
-
-  // When NODE_ENV = test => post
-  //               = prod => get
-  const methodMap: Record<string, string> = {
-    test: 'post',
-    prod: 'get'
-  }
-
-  if (!config.wallet) {
-    throw new Error(`No wallet configured`)
+    settle: '/rest/list/resolved',
   }
 
   if (!Object.prototype.hasOwnProperty.call(urlMap, endpoint)) {
     throw new AdapterError({
       jobRunID,
       message: `Endpoint ${endpoint} not supported.`,
-      statusCode: 400,
+      statusCode: 500,
     })
   }
 
   // --- API Configuration ---
   const url = urlMap[endpoint]
-  const method = methodMap[config.env]
+  const envConfig = envConfigMap[config.env]
+  const authorization = {
+    Authorization: `OAuth ${config.apiKey}`,
+  }
 
   const options = {
     ...config.api,
+    ...envConfig,
     url,
-    method
+    headers: {
+      ...config.api.headers,
+      ...authorization,
+    },
   }
-
-  options.headers['Authorization'] = `OAuth ${config.apiKey}`
 
   // --- API Request ---
   const response: AzuroResponse = await Requester.request(options)
@@ -91,52 +107,84 @@ export const execute = async (request: AdapterRequest, config: Config): Promise<
   } else if (data.length === 0) {
     throw new AdapterError({
       jobRunID,
-      message: "API returned empty result",
+      message: 'API returned empty result',
       statusCode: 500,
     })
   }
 
   // --- API Endpoint Handlers ---
-  const [event] = response.data
   const packedContract = new ethers.Contract(contractAddress, packedAbi, config.wallet)
   const contract = new ethers.Contract(contractAddress, abi, config.wallet)
-  const nonce = await config.wallet.getTransactionCount()
-  let tx = {}
 
   const methods: Record<string, CallableFunction> = {
-    open: async () => {
-      const { id, odd1, odd2, timestamp, ipfsHash } = event as AzuroCreateEvent
+    open: async (event: AzuroCreateEvent, txConfig: TxConfig) => {
+      const { id, odd1, odd2, timestamp, ipfsHash } = event
+      let tx
 
       if (packed) {
-        const types = ["uint256", "uint256[]", "uint256", "string"]
-        const values = [id, [odd1, odd2], timestamp, ipfsHash]
+        const types = ['uint256', 'uint256[]', 'uint256', 'string']
+        const values = [id, [odd1, odd2], Math.trunc(timestamp), ipfsHash]
         const calldata = ethers.utils.defaultAbiCoder.encode(types, values)
-        tx = await packedContract.createCondition(calldata)
+        tx = await packedContract.createCondition(calldata, {
+          ...txConfig,
+        })
       } else {
-        tx = await contract.createCondition(id, odd1, odd2, timestamp, formatIpfsHash(ipfsHash), { nonce })
+        tx = await contract.createCondition(
+          id,
+          odd1,
+          odd2,
+          Math.trunc(timestamp),
+          formatIpfsHash(ipfsHash),
+          {
+            ...txConfig,
+          },
+        )
       }
+      await tx.wait()
+      return tx
     },
-    settle: async () => {
-      const { id, result } = event as AzuroResolveEvent
+    settle: async (event: AzuroResolveEvent, txConfig: TxConfig) => {
+      const { id, result } = event
+      let tx
 
       if (packed) {
-        const types = ["uint256", "uint8"]
+        const types = ['uint256', 'uint8']
         const values = [id, result]
         const calldata = ethers.utils.defaultAbiCoder.encode(types, values)
-        tx = await packedContract.resolveCondition(calldata)
+        tx = await packedContract.resolveCondition(calldata, {
+          ...txConfig,
+        })
       } else {
-        tx = await contract.resolveCondition(id, result, { nonce })
+        tx = await contract.resolveCondition(id, result, {
+          ...txConfig,
+        })
       }
+      await tx.wait()
+      return tx
+    },
+  }
+
+  let succeeded = []
+  let failed = 0
+  let nonce = await config.wallet.getTransactionCount()
+
+  for (let i = 0; i < data.length; i++) {
+    try {
+      let tx = await methods[endpoint](data[i], { nonce })
+      nonce++
+      succeeded.push({ txHash: tx.hash, id: data[i].id })
+      Logger.debug(`Tx: ${tx.hash}`)
+    } catch (e) {
+      failed++
+      Logger.error(e)
     }
   }
 
-  methods[endpoint]()
+  Logger.debug(`Updated ${succeeded.length} events`)
+  Logger.debug(`Failed to update ${failed} events`)
 
-  Logger.debug(`tx: `, tx)
-
-  return Requester.success(jobRunID, tx, config.verbose)
+  return Requester.success(jobRunID, { data: { result: succeeded } }, config.verbose)
 }
-
 
 export const makeExecute: ExecuteFactory<Config> = (config) => {
   return async (request) => execute(request, config || makeConfig())

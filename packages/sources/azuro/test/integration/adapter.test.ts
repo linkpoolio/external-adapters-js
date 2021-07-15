@@ -1,80 +1,85 @@
-import { Requester } from '@chainlink/ea-bootstrap'
-import { assertError, assertSuccess } from '@chainlink/ea-test-helpers'
+import { assertSuccess } from '@chainlink/ea-test-helpers'
 import { AdapterRequest } from '@chainlink/types'
 import { makeExecute } from '../../src/adapter'
 import { api } from '../api'
 
 describe('execute', () => {
   const jobID = '1'
+  const contractAddress = '0x2B609737b808b56205656EeE6AD87141E19389eC'
   const execute = makeExecute()
 
   describe('endpoint = open', () => {
-    // reset db and add fresh entry
     beforeEach(async () => {
-      // await api.post(`/rest/reset`)
-      // await api.post(`/rest/mock/new`)
-    })
+      await api.post(`/rest/reset`)
+      for (let i = 0; i < 3; i++) {
+        await api.post(`/rest/mock/new`)
+      }
 
-    it('is valid result', async () => {
+      const data = await api.post('/rest/list/new')
+      expect(data.data.length).toEqual(3)
+    }, 20000)
+
+    it('open market', async () => {
       const req = {
-        id: 'f725715d-4ede-4409-9717-1f87b996e3d1',
+        id: jobID,
         data: {
           endpoint: 'open',
-          contractAddress: '0x0E801D84Fa97b50751Dbf25036d067dCf18858bF'
-        }
+          contractAddress,
+        },
       }
 
       const res = await execute(req as AdapterRequest)
 
       assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
-      expect(Array.isArray(res.data.result)).toBe(true)
-    })
+      expect(res.data.result.length).toEqual(3)
+      res.data.result.forEach((item) => {
+        expect(item).toEqual({
+          id: expect.any(Number),
+          txHash: expect.any(String),
+        })
+      })
+
+      await api.post('rest/call/cron_sc')
+      const data = await api.post('/rest/list/new')
+      expect(data.data.length).toEqual(0)
+    }, 300000)
   })
 
   describe('endpoint = settle', () => {
     beforeEach(async () => {
       await api.post(`/rest/reset`)
-      await api.post(`/rest/mock/new`) // create mock data
-      await api.post(`/rest/mock/resolved`) // update mock data
-    }, 10000)
+      for (let i = 0; i < 3; i++) {
+        await api.post(`/rest/mock/new`)
+      }
+      await api.post(`/rest/mock/resolved`)
 
-    it.skip('is valid result', async () => {
+      const data = await api.post('/rest/list/resolved')
+      expect(data.data.length).toEqual(3)
+    }, 20000)
+
+    it('settle market', async () => {
       const req = {
         id: jobID,
         data: {
-          endpoint: 'settle'
-        }
+          endpoint: 'settle',
+          contractAddress,
+        },
       }
 
       const res = await execute(req as AdapterRequest)
 
       assertSuccess({ expected: 200, actual: res.statusCode }, res, jobID)
-
-      expect(Array.isArray(res.data.result)).toBe(true)
-
-      const [item] = res.data.result
-      // Test against object properties
-      expect(item).toEqual({
-        id: expect.any(Number),
-        result: expect.any(Number)
+      expect(res.data.result.length).toEqual(3)
+      res.data.result.forEach((item) => {
+        expect(item).toEqual({
+          id: expect.any(Number),
+          txHash: expect.any(String),
+        })
       })
-    })
-  })
 
-
-  it('endpoint-dne: is invalid endpoint', async () => {
-    const req = {
-      id: jobID,
-      data: {
-        endpoint: 'endpoint-dne'
-      }
-    }
-
-    try {
-      await execute(req as AdapterRequest)
-    } catch (err) {
-      const errorResp = Requester.errored(jobID, err)
-      assertError({ expected: 400, actual: errorResp.statusCode }, errorResp, jobID)
-    }
+      await api.post('rest/call/cron_sc')
+      const data = await api.post('/rest/list/resolved')
+      expect(data.data.length).toEqual(0)
+    }, 300000)
   })
 })
